@@ -62,7 +62,8 @@
     "mineadmin/jwt": "3.0-RC",
     "mineadmin/support": "3.0-RC",
     "mineadmin/swagger": "3.0-RC",
-    "mineadmin/upload": "3.0-RC"
+    "mineadmin/upload": "3.0-RC",
+    "w7corp/easywechat": "^6.7"
   },
   "require-dev": {
     "doctrine/dbal": "^3.6",
