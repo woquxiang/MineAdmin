@@ -17,6 +17,7 @@ use App\Exception\JwtInBlackException;
 use App\Http\Common\ResultCode;
 use App\Model\Enums\User\Type;
 use App\Repository\Permission\UserRepository;
+use EasyWeChat\MiniApp\Application;
 use Hyperf\Collection\Arr;
 use Hyperf\Stringable\Str;
 use Lcobucci\JWT\Token;
@@ -67,7 +68,12 @@ final class XPassportService extends IService implements CheckTokenInterface
      */
     public function loginApi(string $username, string $password, Type $userType = Type::SYSTEM, string $ip = '0.0.0.0', string $browser = 'unknown', string $os = 'unknown'): array
     {
-        $user = $this->repository->findByUnameType($username, $userType);
+        try {
+            $user = $this->repository->findByUnameType($username, $userType);
+        }catch (\Throwable $e){
+            throw new BusinessException( ResultCode::UNPROCESSABLE_ENTITY, '用户不存在');
+        }
+
         if (! $user->verifyPassword($password)) {
             $this->dispatcher->dispatch(new UserLoginEvent($user, $ip, $os, $browser, false));
             throw new BusinessException(ResultCode::UNPROCESSABLE_ENTITY, trans('auth.password_error'));
@@ -81,12 +87,67 @@ final class XPassportService extends IService implements CheckTokenInterface
         ];
     }
 
+    public function loginWithMiniApp(string $code, string $ip = '0.0.0.0', string $browser = 'unknown', string $os = 'unknown'): array
+    {
+        // 通过 EasyWeChat 获取用户信息
+        $config = config('easywechat');  // 获取配置
+        $miniApp = new Application($config);
+
+        try {
+            $response = $miniApp->getClient()->get('/sns/jscode2session', [
+                'appid' => $config['app_id'], // 小程序的 appid
+                'secret' => $config['secret'], // 小程序的 app secret
+                'js_code' => $code, // 获取到的 code
+                'grant_type' => 'authorization_code',
+            ])->toArray();
+
+            if (isset($response['errcode'])) {
+                throw new BusinessException(ResultCode::UNPROCESSABLE_ENTITY);
+            }
+        } catch (\Throwable $e) {
+            throw new BusinessException(ResultCode::UNPROCESSABLE_ENTITY, '微信登录失败');
+        }
+
+        $openid = $response['openid'];
+        $user = $this->repository->findOrCreateByOpenid($openid);
+
+        // 生成 JWT
+        $this->dispatcher->dispatch(new UserLoginEvent($user, $ip, $os, $browser));
+        $jwt = $this->getApiJwt();
+        return [
+            'access_token' => $jwt->builderAccessToken((string) $user->id)->toString(),
+            'refresh_token' => $jwt->builderRefreshToken((string) $user->id)->toString(),
+            'expire_at' => (int) $jwt->getConfig('ttl', 0),
+        ];
+    }
+
+    public function getPhoneNumber(int $userId, $code): string
+    {
+        // 通过 EasyWeChat 获取用户信息
+        $config = config('easywechat');  // 获取配置
+        $miniApp = new Application($config);
+
+        try {
+            $response =  $miniApp->getClient()->postJson('wxa/business/getuserphonenumber', [
+                'code'=>$code
+            ])->toArray();
+
+            if (isset($response['errcode'])) {
+                throw new BusinessException(ResultCode::UNPROCESSABLE_ENTITY);
+            }
+        } catch (\Throwable $e) {
+            throw new BusinessException(ResultCode::UNPROCESSABLE_ENTITY, '获取手机号失败');
+        }
+        $phoneNumber = $response['phone_info']['phoneNumber'];
+        $this->repository->updatePhoneNumber($userId, $phoneNumber);
+
+        return $phoneNumber;
+    }
+
     public function getApiJwt(): JwtInterface{
         // 填写上一步的场景值
         return $this->jwtFactory->get('api');
     }
-
-
 
     public function checkJwt(UnencryptedToken $token): void
     {
