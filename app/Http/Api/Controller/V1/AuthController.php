@@ -37,7 +37,7 @@ final class AuthController extends AbstractController
     #[Post(
         path: '/v1/auth/login',
         operationId: 'ApiAuthLogin',
-        summary: '小程序 用户登录',
+        summary: '小程序用户登录',
         tags: ['api'],
     )]
     public function loginApi(RequestInterface $request): Result
