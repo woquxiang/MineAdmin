@@ -12,12 +12,15 @@ declare(strict_types=1);
 
 namespace App\Http\Api\Controller\V1;
 
+use App\Http\Api\Middleware\TokenMiddleware;
 use App\Http\Api\Request\V1\UserRequest;
 use App\Http\Common\Controller\AbstractController;
 use App\Http\Common\Result;
+use App\Http\CurrentUser;
 use App\Model\Enums\User\Type;
 use App\Service\XPassportService;
 use Hyperf\Collection\Arr;
+use Hyperf\HttpServer\Annotation\Middleware;
 use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\Swagger\Annotation\HyperfServer;
 use Hyperf\Swagger\Annotation\Post;
@@ -30,6 +33,7 @@ final class AuthController extends AbstractController
 
     public function __construct(
         private readonly XPassportService $passportService,
+        private readonly CurrentUser $currentUser,
     )
     {
     }
@@ -42,23 +46,27 @@ final class AuthController extends AbstractController
     )]
     public function loginApi(RequestInterface $request): Result
     {
-        $username = (string) $request->input('username');
-        $password = (string) $request->input('password');
-        //$ip = Arr::first(array: $request->getClientIps(), callback: static fn ($val) => $val ?: null, default: '0.0.0.0');
-        $ip =  '0.0.0.0';
-        $browser = $request->header('User-Agent') ?: 'unknown';
-        // todo 用户系统的获取
-        $os = $request->header('User-Agent') ?: 'unknown';
+        $code = (string) $request->input('code');
 
-        return $this->success(
-            $this->passportService->loginApi(
-                $username,
-                $password,
-                Type::USER,
-                $ip,
-                $browser,
-                $os
-            )
-        );
+        // 调用服务层进行微信小程序登录
+        $result = $this->passportService->loginWithMiniApp($code);
+
+        return $this->success($result);
+    }
+
+    #[Post(
+        path: '/v1/auth/phone',
+        operationId: 'ApiAuthGetPhone',
+        summary: '获取用户手机号',
+        tags: ['api'],
+    )]
+    #[Middleware(middleware: TokenMiddleware::class, priority: 100)]
+    public function getPhoneNumber(RequestInterface $request): Result
+    {
+        $code = (string) $request->input('code');
+
+        $phoneNumber = $this->passportService->getPhoneNumber($this->currentUser->id(),$code);
+
+        return $this->success(['phoneNumber' => $phoneNumber]);
     }
 }
