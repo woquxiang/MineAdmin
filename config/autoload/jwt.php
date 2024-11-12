@@ -46,4 +46,9 @@ return [
     'application' => [
         // jwt 配置 https://lcobucci-jwt.readthedocs.io/en/latest/
     ],
+    'api' => [
+        'key' => InMemory::base64Encoded(env('JWT_API_SECRET')),
+        // token过期时间，单位为秒
+        'ttl' => (int) 86400 * 3650,
+    ],
 ];

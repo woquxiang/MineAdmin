@@ -58,7 +58,7 @@ final class User extends Model
     /**
      * The attributes that are mass assignable.
      */
-    protected array $fillable = ['id', 'username', 'password', 'user_type', 'nickname', 'phone', 'email', 'avatar', 'signed', 'status', 'login_ip', 'login_time', 'backend_setting', 'created_by', 'updated_by', 'created_at', 'updated_at', 'deleted_at', 'remark','openid'];
+    protected array $fillable = ['id', 'username', 'password', 'user_type', 'nickname', 'phone', 'email', 'avatar', 'signed', 'status', 'login_ip', 'login_time', 'backend_setting', 'created_by', 'updated_by', 'created_at', 'updated_at', 'deleted_at', 'remark','openid','id_card_name','id_card_number'];
 
     /**
      * The attributes that should be cast to native types.
@@ -72,6 +72,8 @@ final class User extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'backend_setting' => 'json',
+        'id_card_name'=>'string',
+        'id_card_number'=>'string',
     ];
 
     public function roles(): BelongsToMany
