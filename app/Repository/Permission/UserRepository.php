@@ -17,6 +17,7 @@ use App\Model\Permission\User;
 use App\Repository\IRepository;
 use Hyperf\Collection\Arr;
 use Hyperf\Database\Model\Builder;
+use Hyperf\Database\Model\ModelNotFoundException;
 
 /**
  * Class UserRepository.
@@ -73,5 +74,36 @@ final class UserRepository extends IRepository
                     $query->where('role_id', $roleId);
                 });
             });
+    }
+
+    public function findOrCreateByOpenid(string $openid): User
+    {
+        // 尝试查找用户
+        try {
+            return $this->model->newQuery()->where('openid', $openid)->firstOrFail();
+        } catch (ModelNotFoundException $e) {
+            $uniqid = uniqid();
+            // 如果用户不存在，则创建新用户
+            return User::create([
+                'username'=>$uniqid,
+                'user_type'=>Type::USER,
+                'openid' => $openid,
+                'nickname' => '用户_' .$uniqid, // 默认用户名
+            ]);
+        }
+    }
+
+    /**
+     * 更新用户的手机号
+     */
+    public function updatePhoneNumber(int $userId, string $phoneNumber): void
+    {
+        $user = User::find($userId);
+        if ($user) {
+            $user->phone = $phoneNumber; // 假设有 phone_number 字段
+            $user->save();
+        } else {
+            throw new ModelNotFoundException('用户不存在');
+        }
     }
 }

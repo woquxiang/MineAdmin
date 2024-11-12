@@ -24,6 +24,7 @@ use App\Model\Jj\Driver;
 use App\Model\Jj\PartyDirectIndemnity;
 use App\Service\PassportService;
 use App\Service\V1\AttachmentService;
+use App\Service\V1\FrontmachineService;
 use App\Service\V1\J123EventService;
 use App\Service\V1\J123PeopleService;
 use App\Service\XPassportService;
@@ -46,7 +47,8 @@ final class FrontmachineController extends AbstractController
         private readonly CurrentUser $currentUser,
         protected readonly AttachmentService $service,
         protected readonly J123EventService $j123EventService,
-        protected readonly J123PeopleService $j123PeopleService
+        protected readonly J123PeopleService $j123PeopleService,
+        private readonly FrontmachineService $frontmachineService
     ) {}
 
     #[Post(
@@ -57,57 +59,64 @@ final class FrontmachineController extends AbstractController
     )]
     public function i1(RequestInterface $request)
     {
-//        // 获取原始请求体数据
-//        $rawData = file_get_contents('php://input');
-//        // 解析 x-www-form-urlencoded 数据
-//        parse_str($rawData, $data);
         $params_data = $request->post('data');
 
         $params_data = str_replace("'", '"', $params_data);
         $params_data = json_decode($params_data,true);
 
-        foreach ($params_data as $_data){
+        foreach ($params_data as $_data) {
             $info = $_data['basic'];
             $people = $_data['people'];
 
-            $this->j123EventService->create([
-                'accident_number'=>$info[0] ?? '',
-                'event_date'=> $info[1] ?? date("Y-m-d H:i"),
-                'weather'=>$info[2] ?? '',
-                'location'=>$info[3] ?? '',
-                'accident_scenario'=>$info[4] ?? '',
-                'accident_type'=>$info[5] ?? '',
-                'data_source'=>$info[6] ?? '',
-                'handling_method'=>$info[7] ?? '',
-                'management_department'=>$info[8] ?? '',
-                'accident_status'=>$info[9] ?? '',
-            ]);
-
-            foreach ($people as $_people){
-                if(count($_people) == 5){//人
-                    $this->j123PeopleService->create([
-                        'accident_number'=>$info[0],
-                        'name'=>$_people[0] ?? '',
-                        'id_number'=>$_people[1] ?? '',
-                        'vehicle_type'=>$_people[2] ?? '',
-                        'phone'=>$_people[3] ?? '',
-                        'responsibility'=>$_people[4] ?? '',
-                    ]);
-                }elseif (count($_people) == 8){
-                    $this->j123PeopleService->create([
-                        'accident_number'=>$info[0],
-                        'name'=>$_people[0] ?? '',
-                        'id_number'=>$_people[1] ?? '',
-                        'vehicle_type'=>$_people[2] ?? '',
-                        'phone'=>$_people[3] ?? '',
-                        'car_type'=>$_people[4] ?? '',
-                        'license_plate'=>$_people[5] ?? '',
-                        'insurance_company'=>$_people[6] ?? '',
-                        'responsibility'=>$_people[7] ?? '',
-                    ]);
-                }
-            }
+            // 调用 FrontmachineService 处理创建或更新
+            $this->frontmachineService->createOrUpdateAccidentRecords($info, $people);
         }
+
+//        foreach ($params_data as $_data){
+//            $info = $_data['basic'];
+//            $people = $_data['people'];
+//
+//            $this->j123EventService->create([
+//                'accident_number'=>$info[0] ?? '',
+//                'event_date'=> $info[1] ?? date("Y-m-d H:i"),
+//                'weather'=>$info[2] ?? '',
+//                'location'=>$info[3] ?? '',
+//                'accident_scenario'=>$info[4] ?? '',
+//                'accident_type'=>$info[5] ?? '',
+//                'data_source'=>$info[6] ?? '',
+//                'handling_method'=>$info[7] ?? '',
+//                'management_department'=>$info[8] ?? '',
+//                'accident_status'=>$info[9] ?? '',
+//            ]);
+//
+//            foreach ($people as $_people){
+//                if(count($_people) == 5){//人
+//                    $this->j123PeopleService->create([
+//                        'accident_number'=>$info[0],
+//                        'name'=>$_people[0] ?? '',
+//                        'id_number'=>$_people[1] ?? '',
+//                        'vehicle_type'=>$_people[2] ?? '',
+//                        'phone'=>$_people[3] ?? '',
+//                        'responsibility'=>$_people[4] ?? '',
+//                    ]);
+//                }elseif (count($_people) == 8){//车
+//                    $this->j123PeopleService->create([
+//                        'accident_number'=>$info[0],
+//                        'name'=>$_people[0] ?? '',
+//                        'id_number'=>$_people[1] ?? '',
+//                        'vehicle_type'=>$_people[2] ?? '',
+//                        'phone'=>$_people[3] ?? '',
+//                        'car_type'=>$_people[4] ?? '',
+//                        'license_plate'=>$_people[5] ?? '',
+//                        'insurance_company'=>$_people[6] ?? '',
+//                        'responsibility'=>$_people[7] ?? '',
+//                    ]);
+//                }
+//            }
+//        }
+
+
+
 
 //        $result =  $this->j123EventService->findById(2);
         return $this->success();

@@ -32,7 +32,7 @@ use EasyWeChat\MiniApp\Application;
 
 
 #[HyperfServer(name: 'http')]
-//#[Middleware(middleware: TokenMiddleware::class, priority: 100)]
+#[Middleware(middleware: TokenMiddleware::class, priority: 100)]
 final class DemoController extends AbstractController
 {
 
@@ -82,7 +82,7 @@ final class DemoController extends AbstractController
         summary: '测试',
         tags: ['api'],
     )]
-    #[Middleware(middleware: TokenMiddleware::class, priority: 100)]
+//    #[Middleware(middleware: TokenMiddleware::class, priority: 100)]
     public function demo1(RequestInterface $request): Result
     {
         //$a = Accident::select(['id','na_reason'])->where('status','>',4)->firstOrFail();
