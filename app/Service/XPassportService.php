@@ -109,12 +109,16 @@ final class XPassportService extends IService implements CheckTokenInterface
         }
 
         $openid = $response['openid'];
+        $session_key = $response['session_key'];
+//        $openid = 'o1bl25ESp5kZvp3snPtZSK8LdAL0';
         $user = $this->repository->findOrCreateByOpenid($openid);
 
         // 生成 JWT
         $this->dispatcher->dispatch(new UserLoginEvent($user, $ip, $os, $browser));
         $jwt = $this->getApiJwt();
         return [
+            'session_key'=>$session_key,
+            'openid'=>$openid,
             'access_token' => $jwt->builderAccessToken((string) $user->id)->toString(),
             'refresh_token' => $jwt->builderRefreshToken((string) $user->id)->toString(),
             'expire_at' => (int) $jwt->getConfig('ttl', 0),
@@ -132,7 +136,7 @@ final class XPassportService extends IService implements CheckTokenInterface
                 'code'=>$code
             ])->toArray();
 
-            if (isset($response['errcode'])) {
+            if (!isset($response['errcode']) || $response['errcode'] != 0 ) {
                 throw new BusinessException(ResultCode::UNPROCESSABLE_ENTITY);
             }
         } catch (\Throwable $e) {
