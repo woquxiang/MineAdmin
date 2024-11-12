@@ -47,7 +47,7 @@ final class AccidentController extends AbstractController
         private readonly CurrentUser $currentUser,
         protected readonly J123EventService $j123EventService,
         protected readonly J123PeopleService $j123PeopleService,
-        private readonly FrontmachineService $frontmachineService
+        private readonly FrontmachineService $frontmachineService,
     ) {}
 
     #[Post(
@@ -99,9 +99,11 @@ final class AccidentController extends AbstractController
         // 查询事故信息
         $accident = $this->j123EventService->findByAccidentNumber($accidentNumber);
 
-        // 查询当事人信息
-        $people = $this->j123PeopleService->findByAccidentNumber($accidentNumber);
-        // 将当事人信息放入事故信息中
+        $people = $this->j123PeopleService->findByAccidentNumber($accidentNumber);// 查询当事人信息
+        $attachment = $this->j123EventService->getAttachmentsByAccidentNumber($accidentNumber);//查询附件
+
+        // 将当事人信息，附件信息放入事故信息中
+        $accident->attachment = $attachment;
         $accident->people = $people;
 
         // 返回事故信息和当事人信息

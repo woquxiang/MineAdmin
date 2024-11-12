@@ -13,7 +13,9 @@ declare(strict_types=1);
 namespace App\Service\V1;
 
 use App\Http\CurrentUser;
+use App\Model\Attachment;
 use App\Model\J123\J123Event;
+use App\Repository\AttachmentRepository;
 use App\Repository\J123\J123EventRepository;
 use App\Repository\J123\J123PeopleRepository;
 use App\Service\IService;
@@ -23,6 +25,7 @@ final class J123EventService extends IService
     public function __construct(
         protected readonly J123EventRepository $repository,
         protected readonly J123PeopleRepository $peopleRepository,
+        private readonly AttachmentRepository $attachmentRepository ,// Inject the AttachmentRepository
         private readonly CurrentUser $currentUser
 
     ) {}
@@ -49,5 +52,16 @@ final class J123EventService extends IService
     public function getAccidentNumbersByIdAndName(string $idNumber, string $name): array
     {
         return $this->peopleRepository->findAccidentNumbersByIdAndName($idNumber, $name);
+    }
+
+    /**
+     * 根据事故编号获取附件信息
+     *
+     * @param string $accidentNumber
+     * @return array
+     */
+    public function getAttachmentsByAccidentNumber(string $accidentNumber): ?Attachment
+    {
+        return $this->attachmentRepository->findByAccidentNumber($accidentNumber);
     }
 }

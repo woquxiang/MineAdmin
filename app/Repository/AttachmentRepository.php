@@ -30,6 +30,21 @@ final class AttachmentRepository extends IRepository
         return $this->model->newQuery()->where('hash', $hash)->first();
     }
 
+    /**
+     * 根据事故编号和当事人姓名查找当事人记录
+     *
+     * @param string $accidentNumber 事故编号
+     * @return Attachment|null 当事人记录或 null
+     */
+    public function findByAccidentNumber(string $accidentNumber): ?Attachment
+    {
+        $origin_name = $accidentNumber . '.pdf';
+
+        return $this->model->newQuery()
+            ->where('origin_name', $origin_name)
+            ->first();
+    }
+
     public function handleSearch(Builder $query, array $params): Builder
     {
         return $query
