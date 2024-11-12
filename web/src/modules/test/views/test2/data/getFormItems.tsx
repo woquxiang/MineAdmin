@@ -131,17 +131,27 @@ export default function getFormItems(formType: 'add' | 'edit' = 'add', t: any, m
     {
       label: '事故类型',
       prop: 'accident_type',
-      render: () => (
-        <el-radio-group v-model={model.accident_type} >
-          {options.map(option => (
-            <el-radio key={option.value} label={option.label} value={option.value} />
-          ))}
-        </el-radio-group>
-      ),
-      itemProps: {
-        rules: [{ required: true, message: '事故类型' }],
+      cols: { md: 12, xs: 24 },
+      render: () => MaDictRadio,
+      renderProps: {
+        renderMode: 'normal',
+        data:options
       },
-    }
+    },
+    // {
+    //   label: '事故类型',
+    //   prop: 'accident_type',
+    //   render: () => (
+    //     <el-radio-group v-model={model.accident_type} >
+    //       {options.map(option => (
+    //         <el-radio key={option.value} label={option.label} value={option.value} />
+    //       ))}
+    //     </el-radio-group>
+    //   ),
+    //   itemProps: {
+    //     rules: [{ required: true, message: '事故类型' }],
+    //   },
+    // }
     //
     // {
     //   label: () => t('baseRoleManage.code'),
