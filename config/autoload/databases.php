@@ -59,4 +59,22 @@ return [
             ],
         ],
     ],
+    'yc'=>[
+        'driver' => 'mysql',
+        'host' => '139.196.111.192',
+        'database' =>'yc_traffic_police',
+        'username' =>'root',
+        'password' => 'Ry4yEjrNjR7kBAL4',
+        'charset' => 'utf8',
+        'collation' =>'utf8_general_ci',
+        'prefix' => '',
+        'pool' => [
+            'min_connections' => 1,
+            'max_connections' => 10,
+            'connect_timeout' => 10.0,
+            'wait_timeout' => 3.0,
+            'heartbeat' => -1,
+            'max_idle_time' => (float) env('DB_MAX_IDLE_TIME', 60),
+        ],
+    ],
 ];

@@ -12,18 +12,51 @@ services:
     volumes:
       - ./:/opt/www
     entrypoint: ["php", "watch", "-c"]
+    ports:
+      - "9501:9501"   # 映射端口 9501
+      - "9503:9503"   # 映射端口 9503
+    networks:
+      - my_network
   mysql:
     image: mysql:5.7
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: mineadmin
+    volumes:
+      - mysql_data:/var/lib/mysql  # 持久化 MySQL 数据
+    networks:
+      my_network:
+        ipv4_address: 172.24.0.10
+    command: --bind-address=0.0.0.0  # 允许所有 IP 连接
+    ports:
+      - "3306:3306"  # 映射 MySQL 端口
   redis:
     image: redis:alpine
     restart: always
+    networks:
+      my_network:
+        ipv4_address: 172.24.0.20
+    ports:
+      - "6379:6379"  # 映射 Redis 端口
+    volumes:
+      - ./redis.conf:/usr/local/etc/redis/redis.conf  # 挂载配置文件
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]  # 使用自定义配置
   frontend:
     build:
       context: ./web
     environment:
       MINE_NODE_ENV: production
     restart: always
+    networks:
+      - my_network
+
+networks:
+  my_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.24.0.0/24
+
+volumes:
+  mysql_data:  # 定义持久化卷
