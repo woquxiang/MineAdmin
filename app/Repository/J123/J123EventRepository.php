@@ -37,44 +37,56 @@ final class J123EventRepository extends IRepository
 //            ->firstOrFail();
 //    }
 
+
+
+    /**
+     * 根据事故编号查找事故记录
+     *
+     * @param string $accidentNumber 事故编号
+     * @return J123Event|null 事故记录或 null
+     */
+    public function findOneByAccidentNumber(string $accidentNumber): ?J123Event
+    {
+        return $this->model->newQuery()->where('accident_number', $accidentNumber)->first();
+    }
+
     public function handleSearch(Builder $query, array $params): Builder
     {
-        return $query
-            ->when(Arr::get($params, 'unique_username'), static function (Builder $query, $uniqueUsername) {
-                $query->where('username', $uniqueUsername);
-            })
-            ->when(Arr::get($params, 'location'), static function (Builder $query, $username) {
-                $query->where('location', 'like', '%' . $username . '%');
-            })
-            ->when(Arr::get($params, 'accident_number'), static function (Builder $query, $phone) {
-                $query->where('accident_number', $phone);
-            })
-            ->when(Arr::get($params, 'email'), static function (Builder $query, $email) {
-                $query->where('email', $email);
-            })
-            ->when(Arr::exists($params, 'status'), static function (Builder $query) use ($params) {
-                $query->where('status', Arr::get($params, 'status'));
-            })
-            ->when(Arr::exists($params, 'user_type'), static function (Builder $query) use ($params) {
-                $query->where('user_type', Arr::get($params, 'user_type'));
-            })
-            ->when(Arr::exists($params, 'nickname'), static function (Builder $query) use ($params) {
-                $query->where('nickname', 'like', '%' . Arr::get($params, 'nickname') . '%');
-            })
-            ->when(Arr::exists($params, 'created_at'), static function (Builder $query) use ($params) {
-                $query->whereBetween('created_at', [
-                    Arr::get($params, 'created_at')[0] . ' 00:00:00',
-                    Arr::get($params, 'created_at')[1] . ' 23:59:59',
-                ]);
-            })
-            ->when(Arr::get($params, 'user_ids'), static function (Builder $query, $userIds) {
-                $query->whereIn('id', $userIds);
-            })
-            ->when(Arr::get($params, 'role_id'), static function (Builder $query, $roleId) {
-                $query->whereHas('roles', static function (Builder $query) use ($roleId) {
-                    $query->where('role_id', $roleId);
-                });
+         //如果参数中包含身份证号和姓名，则通过身份证号和姓名过滤相关的事故记录
+        if (array_key_exists('id_card_number',$params) && array_key_exists('id_card_name',$params)) {
+            $query->whereIn('accident_number', function ($query) use ($params) {
+                $query->select('accident_number')
+                    ->from('j123_people')
+                    ->where('id_number', '=', $params['id_card_number'])
+                    ->where('name', '=', $params['id_card_name']);
             });
+        }
+
+//        if (array_key_exists('id_card',$params)) {
+//            $query->whereIn('accident_number', function ($query) use ($params) {
+//                $query->select('accident_number')
+//                    ->from('j123_people')
+//                    ->where('id_number', '=', $params['id_card']);
+////                    ->where('name', '=', $params['name']);
+//            });
+//        }
+
+        $query
+            ->when(Arr::get($params, 'location'), static function (Builder $query, $location) {
+                $query->where('location', 'like', '%' . $location . '%');
+            })
+            ->when(Arr::get($params, 'accident_number'), static function (Builder $query, $accident_number) {
+                $query->where('accident_number', $accident_number);
+            })
+            ->when(Arr::get($params, 'accident_status_1'), static function (Builder $query, $accident_status) {
+                if ($accident_status === '已完成') {
+                    $query->where('accident_status', '=', '已完成');
+                } elseif ($accident_status === '未完成') {
+                    $query->where('accident_status', '!=', '已完成');
+                }
+            });
+
+        return $query;
     }
 
 }

@@ -38,6 +38,63 @@ final class J123PeopleRepository extends IRepository
 //            ->firstOrFail();
 //    }
 
+    /**
+     * 根据事故编号查询当事人信息
+     *
+     * @param string $accidentNumber
+     * @return array
+     */
+    public function findByAccidentNumber(string $accidentNumber): array
+    {
+        return $this->model->newQuery()->where('accident_number', $accidentNumber)->get()->toArray();
+    }
+
+    /**
+     * 根据身份证和姓名获取所有相关的事故编号
+     *
+     * @param string $idNumber
+     * @param string $name
+     * @return array
+     */
+    public function findAccidentNumbersByIdAndName(string $idNumber, string $name): array
+    {
+        return $this->model->newQuery()
+            ->where('id_number', $idNumber)
+            ->where('name', $name)
+            ->pluck('accident_number') // 返回所有相关的事故编号
+            ->toArray();
+    }
+
+    /**
+     * 根据事故编号和当事人姓名查找当事人记录
+     *
+     * @param string $accidentNumber 事故编号
+     * @param string $name 当事人姓名
+     * @return J123People|null 当事人记录或 null
+     */
+    public function findOneByAccidentNumberAndName(string $accidentNumber, string $name): ?J123People
+    {
+        return $this->model->newQuery()
+            ->where('accident_number', $accidentNumber)
+            ->where('name', $name)
+            ->first();
+    }
+
+    /**
+     * 检查是否存在匹配的事故编号和身份证号（掩码格式）
+     *
+     * @param string $accidentNumber 事故编号
+     * @param string $maskedIdCard   掩码格式的身份证号
+     * @return bool
+     */
+    public function existsByAccidentNumberAndIdCard(string $accidentNumber, string $maskedIdCard): bool
+    {
+        return J123People::query()
+            ->where('accident_number', $accidentNumber)
+            ->where('id_number', $maskedIdCard)
+            ->exists();
+    }
+
     public function handleSearch(Builder $query, array $params): Builder
     {
         return $query
