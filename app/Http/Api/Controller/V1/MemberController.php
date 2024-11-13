@@ -20,6 +20,7 @@ use App\Http\Common\Result;
 use App\Http\Common\ResultCode;
 use App\Http\CurrentUser;
 use App\Service\PassportService;
+use Hyperf\Collection\Arr;
 use Hyperf\HttpServer\Annotation\Middleware;
 use App\Service\V1\MemberService;
 use Hyperf\HttpServer\Contract\RequestInterface;
@@ -60,6 +61,14 @@ final class MemberController extends AbstractController
     )]
     public function getInfo(RequestInterface $request): Result
     {
-        return $this->success($this->currentUser->user());
+        return $this->success(
+            Arr::only(
+                $this->currentUser->user()?->toArray() ?: [],
+                [
+                    'username', 'nickname', 'avatar','phone',
+                    'openid','id_card_name','id_card_number'
+                ]
+            )
+        );
     }
 }

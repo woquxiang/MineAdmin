@@ -93,38 +93,33 @@ final class FrontmachineService extends IService
     private function createOrUpdatePeople(string $accidentNumber, array $person, int $type)
     {
         // 查找是否已存在当事人记录
-        $personRecord = $this->peopleRepository->findOneByAccidentNumberAndName($accidentNumber, $person[0]);
+        $personRecordModel = $this->peopleRepository->findOneByAccidentNumberAndName($accidentNumber, $person[0]);
 
-        if (!$personRecord) {
+        $personRecord = [
+            'accident_number' => $accidentNumber,
+            'name' => $person[0] ?? '',
+            'id_number' => $person[1] ?? '',
+            'vehicle_type' => $person[2] ?? '',
+            'phone' => $person[3] ?? '',
+        ];
+
+        if ($type == 8) {
+            // 如果是车的信息，添加车相关字段
+            $personRecord['car_type'] = $person[4] ?? '';
+            $personRecord['license_plate'] = $person[5] ?? '';
+            $personRecord['insurance_company'] = $person[6] ?? '';
+            $personRecord['responsibility'] = $person[7] ?? '';
+        }else{//人
+            $personRecord['responsibility'] = $person[4] ?? '';
+        }
+
+        if (!$personRecordModel) {
             // 如果不存在，则创建新记录
-            $personRecord = [
-                'accident_number' => $accidentNumber,
-                'name' => $person[0] ?? '',
-                'id_number' => $person[1] ?? '',
-                'vehicle_type' => $person[2] ?? '',
-                'phone' => $person[3] ?? '',
-                'responsibility' => $person[4] ?? '',
-            ];
-
-            if ($type == 8) {
-                // 如果是车的信息，添加车相关字段
-                $personRecord['car_type'] = $person[4] ?? '';
-                $personRecord['license_plate'] = $person[5] ?? '';
-                $personRecord['insurance_company'] = $person[6] ?? '';
-            }
             $this->peopleRepository->create($personRecord);
         } else {
             // 如果当事人记录存在，进行更新
-            $personRecord->update([
-                'name' => $person[0] ?? $personRecord->name,
-                'id_number' => $person[1] ?? $personRecord->id_number,
-                'vehicle_type' => $person[2] ?? $personRecord->vehicle_type,
-                'phone' => $person[3] ?? $personRecord->phone,
-                'responsibility' => $person[4] ?? $personRecord->responsibility,
-                'car_type' => $person[5] ?? $personRecord->car_type,
-                'license_plate' => $person[6] ?? $personRecord->license_plate,
-                'insurance_company' => $person[7] ?? $personRecord->insurance_company,
-            ]);
+            unset($personRecord['accident_number']);
+            $personRecordModel->update($personRecord);
         }
     }
 }
