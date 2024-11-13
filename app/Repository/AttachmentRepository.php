@@ -42,6 +42,7 @@ final class AttachmentRepository extends IRepository
 
         return $this->model->newQuery()
             ->where('origin_name', $origin_name)
+            ->orderBy('id', 'desc')
             ->first();
     }
 
