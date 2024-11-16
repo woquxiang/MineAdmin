@@ -24,6 +24,9 @@ import XForm from './form.vue'
 import {deleteByIds} from "~/base/api/role";
 const selections = ref<any[]>([])
 
+const router = useRouter()
+
+
 const options = reactive<MaProTableOptions>({
   header: {
     mainTitle: '交警管理',
@@ -126,6 +129,14 @@ function handleDelete() {
     }"
       >
         <template #actions>
+
+          <el-button
+            type="danger"
+            @click="() =>router.push({'path':'/test/second/create'}) "
+          >
+            新页面
+          </el-button>
+
           <el-button
             v-auth="['permission:role:save']"
             type="primary"
