@@ -28,7 +28,7 @@ export default function getTableColumns(dialog: UseDialogExpose, formRef: any, t
     showOverflowTooltip: false,
   },
     { label: '受案编号', prop: 'accident_number',width:'200px' },
-    { label: '事故时间', prop: 'event_date',width:'180px' },
+    { label: '事故时间', prop: 'event_date',width:'180px'},  // 设置默认排序为降序},
     { label: '天气情况', prop: 'weather' },
     { label: '事故地点', prop: 'location',width:'200px' },
     { label: '事故情形', prop: 'accident_scenario' },
