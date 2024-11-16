@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Http\Api\Controller\V1;
 
+use App\Client\RoadFund\RoadFundApplication;
 use App\Http\Api\Middleware\TokenMiddleware;
 use App\Http\Api\Request\UploadRequest;
 use App\Http\Api\Controller\AbstractController;
@@ -48,6 +49,7 @@ final class AccidentController extends AbstractController
         protected readonly J123EventService $j123EventService,
         protected readonly J123PeopleService $j123PeopleService,
         private readonly FrontmachineService $frontmachineService,
+        protected readonly RoadFundApplication $roadFundApplication
     ) {}
 
     #[Post(
@@ -77,6 +79,13 @@ final class AccidentController extends AbstractController
     )]
     public function details(RequestInterface $request)
     {
+        $file_path = BASE_PATH . "/storage/uploads/2024-10-24/66004abc-2f13-421e-8943-da066074f3dd.png";
+
+//        $result = $this->roadFundApplication->uploadFile(['file'=>$file_path]);
+        $result = $this->roadFundApplication->getFileViewUrl(['fileId'=>'850e7ca326a94e17a21f28318d3b4a22']);
+
+        var_dump($result);
+
         // 获取 POST 请求中的事故编号
         $accidentNumber = $request->post('accident_number');
 
