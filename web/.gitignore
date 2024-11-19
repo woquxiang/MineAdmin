@@ -7,3 +7,4 @@ dist-ssr
 .stylelintcache
 pnpm-lock.yaml
 .idea*
+src/plugins/
