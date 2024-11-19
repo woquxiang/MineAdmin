@@ -14,7 +14,7 @@ import getTableColumns from './data/getTableColumns.tsx'
 
 
 const tableRef = ref<MaProTableExpose>()
-const setFormRef = ref()
+const partyRef = ref()
 
 const i18n = useTrans() as TransType
 const t = i18n.globalTrans
@@ -22,6 +22,7 @@ const msg = useMessage()
 
 import XForm from './form.vue'
 import {deleteByIds} from "~/base/api/role";
+import Party from "~/test/views/test2/party.vue";
 const selections = ref<any[]>([])
 
 const router = useRouter()
@@ -29,8 +30,8 @@ const router = useRouter()
 
 const options = reactive<MaProTableOptions>({
   header: {
-    mainTitle: '交警管理',
-    subTitle: '副标题',
+    mainTitle: '案件管理',
+    // subTitle: '',
   },
   requestOptions: {
     api: J123Event.page,
@@ -40,6 +41,21 @@ const options = reactive<MaProTableOptions>({
     on: {
       // 表格选择事件
       onSelectionChange: (selection: any[]) => selections.value = selection,
+      // 监听表格排序事件
+      onSortChange: (sortField: string, sortOrder: string) => {
+        // 获取当前的搜索表单数据
+        const currentSearchForm = tableRef.value.getSearchForm() || {}
+
+        // 更新排序字段和排序方向
+        const updatedSearchForm = {
+          ...currentSearchForm,  // 合并已有的表单数据
+          order_by: sortField.prop,  // 排序字段
+          order_by_direction: sortField.order === 'ascending' ? 'asc' : 'desc',  // 排序方向
+        }
+
+        tableRef.value.setRequestParams(updatedSearchForm,true)
+      },
+
     },
   },
 })
@@ -82,17 +98,21 @@ const maDialog: UseDialogExpose = useDialog({
       }).catch()
     }
     else {
-      const elForm = setFormRef.value.maForm.getElFormRef()
-      // 验证通过后
-      elForm.validate().then(() => {
-        // 设置角色
-        setFormRef.value.saveUserRole().then((res: any) => {
-          res.code === ResultCode.SUCCESS ? msg.success(t('baseUserManage.setRoleSuccess')) : msg.error(res.message)
-          maDialog.close()
-        }).catch((err: any) => {
-          msg.alertError(err)
-        })
-      })
+      // maDialog.close()
+
+      // alert(444)
+
+      // const elForm = setFormRef.value.maForm.getElFormRef()
+      // // 验证通过后
+      // elForm.validate().then(() => {
+      //   // 设置角色
+      //   setFormRef.value.saveUserRole().then((res: any) => {
+      //     res.code === ResultCode.SUCCESS ? msg.success(t('baseUserManage.setRoleSuccess')) : msg.error(res.message)
+      //     maDialog.close()
+      //   }).catch((err: any) => {
+      //     msg.alertError(err)
+      //   })
+      // })
     }
     okLoadingState(false)
   },
@@ -169,7 +189,8 @@ function handleDelete() {
       <component :is="maDialog.Dialog">
         <template #default="{ formType, data }">
           <!-- 新增、编辑表单 -->
-          <XForm v-if="formType !== 'setPermission'" ref="formRef" :form-type="formType" :data="data" />
+          <XForm v-if="formType !== 'party'" ref="formRef" :form-type="formType" :data="data" />
+          <Party v-else ref="partyRef" :data="data" />
 
         </template>
       </component>
