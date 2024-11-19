@@ -20,3 +20,7 @@ tests/junit.xml
 public
 !web/public
 *.lock
+plugin/
+storage/view/
+storage/uploads/
+storage/languages/
