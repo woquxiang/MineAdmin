@@ -20,12 +20,12 @@ export default function getFormItems(formType: 'add' | 'edit' = 'add', t: any, m
   if (formType === 'add') {
     model.status = 1
     model.sort = 0
-    model.accident_type = '复杂程序'
+    model.accident_type = '简易程序'
   }
 
   const options = [
     { label: '简易程序', value: '简易程序' },
-    { label: '复杂程序', value: '复杂程序' },
+    // { label: '复杂程序', value: '复杂程序' },
   ];
 
   // // 动态获取复选框选项
@@ -114,6 +114,39 @@ export default function getFormItems(formType: 'add' | 'edit' = 'add', t: any, m
         rules: [{ required: true, message: '事故情形' }],
       },
     },
+    {
+      label: () => '数据来源',
+      prop: 'data_source',
+      render: 'input',
+      renderProps: {
+        placeholder: '数据来源',
+      },
+      itemProps: {
+        rules: [{ required: true, message: '数据来源' }],
+      },
+    },
+    {
+      label: () => '处理方式',
+      prop: 'handling_method',
+      render: 'input',
+      renderProps: {
+        placeholder: '处理方式',
+      },
+      itemProps: {
+        rules: [{ required: true, message: '处理方式' }],
+      },
+    },
+    {
+      label: () => '管理部门',
+      prop: 'management_department',
+      render: 'input',
+      renderProps: {
+        placeholder: '管理部门',
+      },
+      itemProps: {
+        rules: [{ required: true, message: '管理部门' }],
+      },
+    },
     // {
     //   label: '事故类型',
     //   prop: 'accident_type',
@@ -136,6 +169,9 @@ export default function getFormItems(formType: 'add' | 'edit' = 'add', t: any, m
       renderProps: {
         renderMode: 'normal',
         data:options
+      },
+      itemProps: {
+        rules: [{ required: true}],
       },
     },
     // {

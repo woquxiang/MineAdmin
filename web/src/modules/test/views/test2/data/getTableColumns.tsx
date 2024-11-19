@@ -27,8 +27,8 @@ export default function getTableColumns(dialog: UseDialogExpose, formRef: any, t
     type: 'selection',
     showOverflowTooltip: false,
   },
-    { label: '受案编号', prop: 'accident_number',width:'200px' },
-    { label: '事故时间', prop: 'event_date',width:'180px'},  // 设置默认排序为降序},
+    { label: '受案编号', prop: 'accident_number',width:'200px',sortable:true },
+    { label: '事故时间', prop: 'event_date',width:'180px',sortable:true},  // 设置默认排序为降序},
     { label: '天气情况', prop: 'weather' },
     { label: '事故地点', prop: 'location',width:'200px' },
     { label: '事故情形', prop: 'accident_scenario' },
@@ -62,7 +62,8 @@ export default function getTableColumns(dialog: UseDialogExpose, formRef: any, t
     { label: '状态', prop: 'accident_status' },
     {
       type: 'operation',
-      width:'120px',
+      fixed:"right",
+      width:'80px',
       operationConfigure: {
         type: 'dropdown',
         actions: [
@@ -73,6 +74,20 @@ export default function getTableColumns(dialog: UseDialogExpose, formRef: any, t
             onClick: ({ row }) => {
               dialog.setTitle(t('crud.edit'))
               dialog.open({ formType: 'edit', data: row })
+            },
+          },
+          {
+            name: 'setRole',
+            // show: ({ row }) => showBtn(['permission:user:getRole', 'permission:user:setRole'], row),
+            icon: 'material-symbols:person-add-rounded',
+            text: () => '当事人',
+            onClick: ({ row }) => {
+              dialog.setTitle('当事人列表')
+              dialog.open({ formType: 'party', data: row })
+              // 设置对话框的确定按钮行为
+              dialog.on.ok = () => {
+                dialog.close()
+              }
             },
           },
           {
