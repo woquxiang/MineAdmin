@@ -17,8 +17,10 @@ use App\Model\J123\J123Event;
 use App\Model\Permission\User;
 use App\Repository\IRepository;
 use Hyperf\Collection\Arr;
+use Hyperf\Collection\Collection;
 use Hyperf\Database\Model\Builder;
 use Hyperf\Database\Model\ModelNotFoundException;
+use Hyperf\Paginator\AbstractPaginator;
 
 /**
  * Class UserRepository.
@@ -36,7 +38,50 @@ final class J123EventRepository extends IRepository
 //            ->where('user_type', $userType)
 //            ->firstOrFail();
 //    }
+//
+//    protected function enablePageOrderBy(): bool
+//    {
+//        return false;
+//    }
 
+
+//    public function handleOrderBy(Builder $query, $params): Builder
+//    {
+//        $query->orderBy('accident_number', 'desc');
+//
+//        // 调用父类的 handleOrderBy 方法，保留父类的排序逻辑
+//        $query = parent::handleOrderBy($query, $params);
+//
+//
+////        // 自定义的排序逻辑
+////        if (isset($params['custom_sort_field'])) {
+////            // 根据 custom_sort_field 参数进行额外排序
+////            $customSortField = $params['custom_sort_field'];
+////            $customSortDirection = $params['custom_sort_direction'] ?? 'asc';  // 默认为升序
+////            $query->orderBy($customSortField, $customSortDirection);
+////        }
+//
+//        return $query;
+//    }
+
+//    public function page(array $params = [], ?int $page = null, ?int $pageSize = null): array
+//    {
+//        $result = $this->perQuery($this->getQuery($params), $params)->paginate(
+//            perPage: $pageSize,
+//            pageName: static::PER_PAGE_PARAM_NAME,
+//            page: $page,
+//        );
+//        if ($result instanceof AbstractPaginator) {
+//            $items = $result->getCollection();
+//        } else {
+//            $items = Collection::make($result->items());
+//        }
+//        $items = $this->handleItems($items);
+//        return $this->handlePage([
+//            'list' => $items->toArray(),
+//            'total' => $result->total(),
+//        ]);
+//    }
 
 
     /**
@@ -52,7 +97,7 @@ final class J123EventRepository extends IRepository
 
     public function handleSearch(Builder $query, array $params): Builder
     {
-         //如果参数中包含身份证号和姓名，则通过身份证号和姓名过滤相关的事故记录
+         //如果参数中包含身份证号和姓名，则通过身份证号和姓名过滤相关的事故记录asdf
         if (array_key_exists('id_card_number',$params) && array_key_exists('id_card_name',$params)) {
             $query->whereIn('accident_number', function ($query) use ($params) {
                 $query->select('accident_number')
@@ -72,6 +117,13 @@ final class J123EventRepository extends IRepository
 //        }
 
         $query
+            ->when(Arr::get($params, 'dsr_name'), static function (Builder $query, $dsr_name) use ($params) {
+                $query->whereIn('accident_number', function ($query) use ($params) {
+                    $query->select('accident_number')
+                        ->from('j123_people')
+                        ->where('name', '=', $params['dsr_name']);
+                });
+            })
             ->when(Arr::get($params, 'location'), static function (Builder $query, $location) {
                 $query->where('location', 'like', '%' . $location . '%');
             })
@@ -84,7 +136,9 @@ final class J123EventRepository extends IRepository
                 } elseif ($accident_status === '未完成') {
                     $query->where('accident_status', '!=', '已完成');
                 }
-            });
+            })
+            ->where('location','<>','')
+        ;
 
         return $query;
     }

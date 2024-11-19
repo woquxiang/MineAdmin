@@ -30,6 +30,26 @@ final class J123EventService extends IService
 
     ) {}
 
+    /**
+     * 获取事故信息分页并关联人员信息
+     *
+     * @param array $filters
+     * @param int $page
+     * @param int $pageSize
+     * @return array
+     */
+    public function page(array $params, int $page = 1, int $pageSize = 10): array
+    {
+        // 1. 获取事故信息分页数据
+        $events = $this->repository->page($params, $page, $pageSize);
+
+        // 2. 根据事故编号获取人员信息
+        foreach ($events['list'] as &$event) {
+            $event['people'] = $this->peopleRepository->findByAccidentNumber($event['accident_number']);
+        }
+
+        return $events;
+    }
 
     /**
      * 根据事故编号查找事故信息

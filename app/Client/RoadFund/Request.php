@@ -32,7 +32,6 @@ class Request
     // 获取 token（如果 token 无效，重新获取）
     public function getToken()
     {
-        var_dump('时' , date('Y-m-d H:i:s',$this->tokenExpiry));
         if (!$this->token || $this->tokenExpiry < time()) {
             $this->requestToken();
         }

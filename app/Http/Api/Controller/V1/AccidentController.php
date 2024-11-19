@@ -23,12 +23,15 @@ use App\Model\Jj\AccidentParty;
 use App\Model\Jj\AccidentWounded;
 use App\Model\Jj\Driver;
 use App\Model\Jj\PartyDirectIndemnity;
+use App\Repository\rescuefund\RescueFundRegionsRepository;
 use App\Service\PassportService;
+use App\Service\rescuefund\RegionsService;
 use App\Service\V1\AttachmentService;
 use App\Service\V1\FrontmachineService;
 use App\Service\V1\J123EventService;
 use App\Service\V1\J123PeopleService;
 use App\Service\XPassportService;
+use Hyperf\DbConnection\Db;
 use Hyperf\HttpServer\Annotation\Middleware;
 use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\Stringable\Str;
@@ -49,7 +52,9 @@ final class AccidentController extends AbstractController
         protected readonly J123EventService $j123EventService,
         protected readonly J123PeopleService $j123PeopleService,
         private readonly FrontmachineService $frontmachineService,
-        protected readonly RoadFundApplication $roadFundApplication
+        protected readonly RoadFundApplication $roadFundApplication,
+        protected readonly RegionsService $regionsService,
+        protected readonly RescueFundRegionsRepository $rescueFundRegionsRepository,
     ) {}
 
     #[Post(
@@ -79,13 +84,6 @@ final class AccidentController extends AbstractController
     )]
     public function details(RequestInterface $request)
     {
-        $file_path = BASE_PATH . "/storage/uploads/2024-10-24/66004abc-2f13-421e-8943-da066074f3dd.png";
-
-//        $result = $this->roadFundApplication->uploadFile(['file'=>$file_path]);
-        $result = $this->roadFundApplication->getFileViewUrl(['fileId'=>'850e7ca326a94e17a21f28318d3b4a22']);
-
-        var_dump($result);
-
         // 获取 POST 请求中的事故编号
         $accidentNumber = $request->post('accident_number');
 

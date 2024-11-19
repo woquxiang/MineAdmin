@@ -31,4 +31,9 @@ abstract class AbstractController
     {
         return new Result($code, $message, $data);
     }
+
+    protected function danger(?string $message = null, mixed $data = []): Result
+    {
+        return new Result(ResultCode::PARAMS_ERROR, $message, $data);
+    }
 }
