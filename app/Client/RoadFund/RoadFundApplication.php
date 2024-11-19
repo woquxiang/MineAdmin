@@ -56,10 +56,22 @@ class RoadFundApplication extends Request
         return $this->exec(); // 执行请求并返回结果
     }
 
+    // 获取文件base64
+    public function downloadFile(array $data)
+    {
+        $this->type = 'POST';
+        $this->path = '/third/fileCall/downloadFile/' . $data['fileId']; // 文件预览接口路径，动态替换fileId
+        $this->data = $data; // 合并请求数据
+
+        return $this->exec(); // 执行请求并返回结果
+    }
+
     // 执行请求
     protected function exec()
     {
         $response = $this->sendRequest($this->data);
+        $this->data = [];
+
         return json_decode($response, true);
     }
 }

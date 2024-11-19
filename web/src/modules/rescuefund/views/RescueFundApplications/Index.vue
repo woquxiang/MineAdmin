@@ -108,6 +108,11 @@ const options = ref<MaProTableOptions>({
       isFoldBtn: () => t('crud.searchFold'),
       notFoldBtn: () => t('crud.searchUnFold'),
     },
+    on:{
+      reset:()=>{
+        console.log(333)
+      }
+    }
   },
   // 搜索表单参数
   searchFormOptions: { labelWidth: '100px' },
