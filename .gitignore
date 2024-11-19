@@ -12,6 +12,7 @@ vendor/
 .phpunit*
 *.cache
 .vscode/
+storage/swagger/http.json
 tests/cover
 tests/coverage.xml
 tests/coding_standard.xml
@@ -19,3 +20,7 @@ tests/junit.xml
 public
 !web/public
 *.lock
+plugin/
+storage/view/
+storage/uploads/
+storage/languages/
