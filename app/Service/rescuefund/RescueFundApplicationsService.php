@@ -75,10 +75,9 @@ class RescueFundApplicationsService extends IService
         $result = $this->roadFundApplication->createApplication($data);
 
         //$this->rescueFundApplicationsRepository->updateById($id,['sqxx_id'=>66666,'ent_name'=>666666666]);
-
-        var_dump($data);
-        var_dump($result);
-        var_dump(json_encode($result));
+//        var_dump($data);
+//        var_dump($result);
+//        var_dump(json_encode($result));
 
         if(0 !== $result['code']){
             throw new BusinessException(code: ResultCode::UNPROCESSABLE_ENTITY,message: $result['msg'] );
