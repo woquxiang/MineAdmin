@@ -31,7 +31,13 @@ export default function getFormItems(formType: 'add' | 'edit' = 'add', t: any, m
       render: () => MaDictRadio,
       renderProps: {
         renderMode: 'normal',
-        dictName:'rescue-fund-apply_fee_type'
+        dictName:'rescue-fund-apply_fee_type',
+        onChange: (val) => {
+          console.log(val)
+          if(val == 2010003){
+            model.sg_city = '3333'
+          }
+        }
       },
       itemProps: {
         rules: [{ required: true, message: '申请费用类型' }],
@@ -52,20 +58,29 @@ export default function getFormItems(formType: 'add' | 'edit' = 'add', t: any, m
                         rules: [{ required: true, message: '事故时间' }],
                       },
                 },
-                    {
-      label: '事故地点（省）',
-      prop: 'sg_prov',
-      render: () =><el-input/>
-                },
+      {
+        label: '事故地点（省）',
+        prop: 'sg_prov',
+        render: () =><el-input/>,
+        renderProps:{
+          disabled:formType === 'edit'
+        }
+      },
                     {
       label: '事故地点（市）',
       prop: 'sg_city',
-      render: () => <el-input/>
+      render: () => <el-input/>,
+      renderProps:{
+        disabled:formType === 'edit'
+      }
                 },
                     {
       label: '事故地点（区/县）',
       prop: 'sg_area',
-      render: () => <el-input/>
+      render: () => <el-input/>,
+      renderProps:{
+        disabled:formType === 'edit'
+      }
                 },
                     {
       label: '事故详细地址',
@@ -135,14 +150,22 @@ export default function getFormItems(formType: 'add' | 'edit' = 'add', t: any, m
       render: () =><el-input/>
                 },
                     {
-      label: '亲属联系方式（默认空字符串）',
+      label: '亲属联系方式',
       prop: 'relatives_phone',
       render: () => <el-input/>
                 },
                     {
-      label: '是否个人（默认0）',
+      label: '是否个人',
       prop: 'is_people',
-      render: () => <ma-dict-radio />,
+      render: () => (
+        <el-radio-group >
+          <el-radio value="0">非个人</el-radio>
+          <el-radio value="1">个人</el-radio>
+        </el-radio-group>
+      ),
+      itemProps: {
+            rules: [{ required: true, message: '是否个人' }],
+      },
                 },
                     {
       label: '医疗/殡葬机构',
@@ -150,7 +173,7 @@ export default function getFormItems(formType: 'add' | 'edit' = 'add', t: any, m
       render: () => <el-input/>
                 },
                     {
-      label: '来源渠道（默认unknown）',
+      label: '来源渠道',
       prop: 'channel_type',
       render: () => <el-input/>
                 },

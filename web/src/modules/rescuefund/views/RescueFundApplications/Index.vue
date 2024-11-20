@@ -21,6 +21,7 @@ import { useMessage } from '@/hooks/useMessage.ts'
 import { ResultCode } from '@/utils/ResultCode.ts'
 
 import Form from './Form.vue'
+import {watch} from "vue/dist/vue";
 
 defineOptions({ name: 'rescuefund:rescue_fund_applications' })
 

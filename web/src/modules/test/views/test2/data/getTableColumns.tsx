@@ -84,10 +84,6 @@ export default function getTableColumns(dialog: UseDialogExpose, formRef: any, t
             onClick: ({ row }) => {
               dialog.setTitle('当事人列表')
               dialog.open({ formType: 'party', data: row })
-              // 设置对话框的确定按钮行为
-              dialog.on.ok = () => {
-                dialog.close()
-              }
             },
           },
           {
