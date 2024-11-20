@@ -107,7 +107,7 @@ class FilesService extends IService
         $result = $this->roadFundApplication->uploadFile(['file'=>$file_path]);
 
         if(0 !== $result['code']){
-            throw new BusinessException(code: ResultCode::UNPROCESSABLE_ENTITY,message:  '文件上传上传失败');
+            throw new BusinessException(code: ResultCode::UNPROCESSABLE_ENTITY,message:  '文件上传失败');
         }
 
         $res_data = $result['data'];

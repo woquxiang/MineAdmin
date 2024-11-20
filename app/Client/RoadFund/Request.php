@@ -114,39 +114,76 @@ class Request
 //            'otherParam' => 'value',           // 其他参数
 //        ]);
 
+        try {
 
-        // 检查是否有文件字段，如果有文件字段，则使用 multipart 格式
-        if (isset($data['file']) && file_exists($data['file'])) {
-            // 构造multipart数据
-            $multipart = [
-                [
-                    'name'     => 'file',  // 这里的 'file' 是接口定义中的字段名
-                    'contents' => fopen($data['file'], 'r'), // 'file' 是文件路径
-                    'filename' => basename($data['file'])   // 文件名
-                ]
-            ];
+            // 检查是否有文件字段，如果有文件字段，则使用 multipart 格式
+            if (isset($data['file']) && file_exists($data['file'])) {
+                // 构造multipart数据
+                $multipart = [
+                    [
+                        'name'     => 'file',  // 这里的 'file' 是接口定义中的字段名
+                        'contents' => fopen($data['file'], 'r'), // 'file' 是文件路径
+                        'filename' => basename($data['file'])   // 文件名
+                    ]
+                ];
 
-            // 合并其他数据
-            foreach ($data as $key => $value) {
-                if ($key !== 'file') {  // 排除文件字段
-                    $multipart[] = [
-                        'name'     => $key,
-                        'contents' => $value
-                    ];
+                // 合并其他数据
+                foreach ($data as $key => $value) {
+                    if ($key !== 'file') {  // 排除文件字段
+                        $multipart[] = [
+                            'name'     => $key,
+                            'contents' => $value
+                        ];
+                    }
                 }
+
+                // 使用 multipart 格式发送请求
+                $response = $client->request($this->type, $url, [
+                    'headers'   => $this->headers,
+                    'multipart' => $multipart,  // 使用 multipart 来发送数据
+                ]);
+            } else {
+                // 没有文件时，使用 JSON 格式发送请求
+                $response = $client->request($this->type, $url, [
+                    'headers' => $this->headers,
+                    'json'    => $data,  // 使用 JSON 格式发送数据
+                ]);
             }
 
-            // 使用 multipart 格式发送请求
-            $response = $client->request($this->type, $url, [
-                'headers'   => $this->headers,
-                'multipart' => $multipart,  // 使用 multipart 来发送数据
-            ]);
-        } else {
-            // 没有文件时，使用 JSON 格式发送请求
-            $response = $client->request($this->type, $url, [
-                'headers' => $this->headers,
-                'json'    => $data,  // 使用 JSON 格式发送数据
-            ]);
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+            // 捕获 ClientException 异常
+            $response = $e->getResponse();  // 获取响应体
+            $statusCode = $response->getStatusCode(); // 获取响应状态码
+            $reasonPhrase = $response->getReasonPhrase(); // 获取响应原因短语
+            $body = $response->getBody()->getContents(); // 获取响应内容
+
+            // 日志记录异常信息
+            error_log("Request failed with status code: $statusCode $reasonPhrase");
+            error_log("Response body: $body");
+
+            // 你可以根据需要进一步处理错误，比如返回特定的错误信息
+            throw new \Exception("请求失败: $statusCode $reasonPhrase");
+        }
+        catch (\GuzzleHttp\Exception\ServerException $e) {
+            // 捕获 ServerException 异常（5xx 错误）
+            $response = $e->getResponse();  // 获取响应体
+            $statusCode = $response->getStatusCode(); // 获取响应状态码
+            $reasonPhrase = $response->getReasonPhrase(); // 获取响应原因短语
+            $body = $response->getBody()->getContents(); // 获取响应内容
+
+            // 日志记录异常信息
+            error_log("Server error with status code: $statusCode $reasonPhrase");
+            error_log("Response body: $body");
+
+            throw new \Exception("服务器错误: $statusCode $reasonPhrase");
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            // 捕获其他请求异常（如网络错误）
+            $message = $e->getMessage();
+
+            // 日志记录异常信息
+            error_log("Request error: " . $message);
+
+            throw new \Exception("请求错误: " . $message);
         }
 
         // 获取并返回响应内容
