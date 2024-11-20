@@ -16,6 +16,12 @@ const globalConfigSettings: SystemSettings.all = {
  * 请在此处编写或去官网文档站粘贴配置代码
  * https://www.mineadmin.com/useDoc/globalConfigSettings
  */
+  welcomePage: {
+    name: 'dashboard:workbench',
+    path: '/dashboard/workbench',
+    title: '工作台',
+    icon: 'icon-park-outline:jewelry',
+  },
 }
 
 export default globalConfigSettings
