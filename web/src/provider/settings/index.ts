@@ -27,9 +27,9 @@ const defaultGlobalConfigSettings: RecursiveRequired<SystemSettings.all> = {
     watermarkText: import.meta.env.VITE_APP_TITLE,
   },
   welcomePage: {
-    name: 'welcome',
-    path: '/welcome',
-    title: '欢迎页',
+    name: 'dashboard:workbench',
+    path: '/dashboard/workbench',
+    title: '工作台',
     icon: 'icon-park-outline:jewelry',
   },
   mainAside: {
@@ -50,9 +50,9 @@ const defaultGlobalConfigSettings: RecursiveRequired<SystemSettings.all> = {
   copyright: {
     enable: true,
     dates: useDayjs().format('YYYY'),
-    company: 'MineAdmin Team',
-    website: 'https://www.mineadmin.com',
-    putOnRecord: '豫ICP备00000000号-1',
+    company: '',
+    website: '',
+    putOnRecord: '',
   },
 }
 

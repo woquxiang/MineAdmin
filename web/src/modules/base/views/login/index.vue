@@ -25,7 +25,7 @@ import CopyRight from './components/copyright.vue'
       <Dashed />
       <Light />
       <Slogan />
-      <OneWord />
+<!--      <OneWord />-->
     </div>
     <div class="login-form-container">
       <Logo />

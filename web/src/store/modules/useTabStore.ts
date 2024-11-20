@@ -27,7 +27,7 @@ const useTabStore = defineStore(
       name: welcomePage.name,
       path: welcomePage.path,
       fullPath: welcomePage.path,
-      i18n: 'menu.welcome',
+      // i18n: 'menu.welcome', //去掉 不然一只会显示欢迎页
       icon: welcomePage.icon,
       title: welcomePage.title,
       affix: true,

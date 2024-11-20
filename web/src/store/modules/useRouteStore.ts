@@ -58,6 +58,7 @@ const useRouteStore = defineStore(
         component: () => import('@/layouts'),
         redirect: welcomePage.path,
         children: [
+          /*** 屏蔽了 欢迎页 去掉 不然会只一个
           Object.assign(welcomeRoute, {
             name: welcomePage.name,
             path: welcomePage.path,
@@ -72,6 +73,7 @@ const useRouteStore = defineStore(
               cache: true,
             },
           }),
+           ***/
           toRecordRawRoute(dashboardRoute),
           toRecordRawRoute({
             path: '/:pathMatch(.*)*',
