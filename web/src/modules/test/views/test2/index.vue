@@ -98,7 +98,8 @@ const maDialog: UseDialogExpose = useDialog({
       }).catch()
     }
     else {
-      // maDialog.close()
+
+      maDialog.close()
 
       // alert(444)
 
