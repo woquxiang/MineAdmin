@@ -18,7 +18,7 @@ export interface NewsVo {
   // 更新者，记录更新者的ID，默认为0
   updated_by: number
   // 排序，控制资讯的显示顺序，默认值为0
-  sort_order: string
+  sort_order: number
   // 作者，不能为空
   author: string
 }

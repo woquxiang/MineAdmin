@@ -30,23 +30,25 @@ export default function getTableColumns(dialog: UseDialogExpose, formRef: any, t
     // 索引序号列
     // { type: 'index' },
     // 普通列
-              { label: () => 'ID', prop: 'id' },
-                    { label: () => '投诉建议的', prop: 'content' },
-                    { label: () => '联系方式', prop: 'contact_info' },
-                    { label: () => '提交时间', prop: 'created_at' },
+    { label: () => 'ID', prop: 'id' },
+    { label: () => '投诉建议的内容', prop: 'content' },
+    { label: () => '联系方式', prop: 'contact_info' },
+    { label: () => '提交时间', prop: 'created_at' },
 
     // 操作列
     {
       type: 'operation',
       label: () => t('crud.operation'),
-      width: '260px',
+      width: '150px',
       operationConfigure: {
         type: 'tile',
         actions: [
           {
             name: 'edit',
             icon: 'i-heroicons:pencil',
-            show: ({ row }) => showBtn('feedback:issues:update', row),
+            // show: ({ row }) => showBtn('feedback:issues:update', row),
+            show:()=>false,
+            // disabled: ({ row }) => true,
             text: () => t('crud.edit'),
             onClick: ({ row }) => {
               dialog.setTitle(t('crud.edit'))

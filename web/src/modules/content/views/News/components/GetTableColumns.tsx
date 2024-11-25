@@ -34,7 +34,7 @@ export default function getTableColumns(dialog: UseDialogExpose, formRef: any, t
                     { label: () => '标题', prop: 'title' },
                     { label: () => '简短描述', prop: 'short_description' },
                     // { label: () => '详情', prop: 'content' },
-                    { label: () => '排序', prop: 'sort_order' },
+                    { label: () => '排序', prop: 'sort_order' ,sortable:true},
                     { label: () => '作者', prop: 'author' },
 
     // 操作列

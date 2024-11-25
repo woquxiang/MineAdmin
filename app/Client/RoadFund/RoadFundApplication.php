@@ -16,6 +16,28 @@ class RoadFundApplication extends Request
         return $this->exec(); // 执行请求
     }
 
+    /***
+     * @param array $data
+     * @return mixed
+     *  Array
+    (
+    [code] => 0
+    [msg] => 成功
+    [data] => Array
+    (
+    [id] => 1860878202602377217
+    [approveUserName] => 10029968
+    [giveMoneyTime] =>
+    [applyFeeType] => 2010001
+    [adjustmentMoney] =>
+    [wechatSqxxState] => 2067001
+    [wechatApproveState] => 2068001
+    [returnReason] =>
+    [fileList] =>
+    )
+    [success] => 1
+    )
+     */
     // 通过ID查询第三方申请信息
     public function getApplicationById(array $data)
     {

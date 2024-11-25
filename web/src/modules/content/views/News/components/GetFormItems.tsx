@@ -15,6 +15,7 @@ export default function getFormItems(formType: 'add' | 'edit' = 'add', t: any, m
   // 新增默认值
   if (formType === 'add') {
     // todo...
+    model.sort_order = 1;
   }
 
   // 编辑默认值
@@ -51,14 +52,19 @@ export default function getFormItems(formType: 'add' | 'edit' = 'add', t: any, m
         rules: [{ required: true, message: '详情', trigger: 'blur' }],
       },
     },
-                                                            {
+    {
       label: '排序',
       prop: 'sort_order',
-                                                              render: () => <el-input/>,
+      // render: () => <el-input/>,
+      render: 'InputNumber',
+      renderProps: {
+        min:0,
+        max:99
+      },
       itemProps: {
         rules: [{ required: true, message: '排序' }],
       },
-                },
+    },
                     {
       label: '作者',
       prop: 'author',

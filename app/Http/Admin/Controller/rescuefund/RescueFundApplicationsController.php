@@ -2,6 +2,7 @@
 
 namespace App\Http\Admin\Controller\rescuefund;
 
+use App\Client\RoadFund\RoadFundApplication;
 use App\Exception\BusinessException;
 use App\Http\Common\ResultCode;
 use App\Repository\rescuefund\FilesRepository;
@@ -39,7 +40,8 @@ class RescueFundApplicationsController extends AbstractController
         protected readonly FilesService $filesService,
         protected readonly FilesRepository $filesRepository,
         private readonly CurrentUser $currentUser,
-        protected readonly RegionsService $regionsService
+        protected readonly RegionsService $regionsService,
+        protected readonly RoadFundApplication $roadFundApplication,
     ) {}
 
     #[Get(
@@ -106,6 +108,9 @@ class RescueFundApplicationsController extends AbstractController
         if(!$result){
             throw new BusinessException(ResultCode::UNPROCESSABLE_ENTITY, '没有找到记录');
         }
+
+        $result1 = $this->roadFundApplication->getApplicationById(['id'=>$result['sqxx_id']]);
+        var_dump($result1);
 
         return $this->success(array_merge($result->toArray(),$this->regionsService->getRegionNamesByFundId($id)));
     }

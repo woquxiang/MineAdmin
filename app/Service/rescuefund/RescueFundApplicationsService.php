@@ -36,7 +36,11 @@ class RescueFundApplicationsService extends IService
 
     public function getUserDetail(int $id, int $createdBy): ?RescueFundApplications
     {
-        return $this->repository->getDetailByIdAndCreatedBy($id, $createdBy);
+        $result = $this->repository->getDetailByIdAndCreatedBy($id, $createdBy);
+        $result->file_list = $this->filesRepository->findFilesByApplicationId($result->id);
+
+        return $result;
+//        return $this->repository->getDetailByIdAndCreatedBy($id, $createdBy);
     }
 
     public function apply(int $id){
@@ -56,6 +60,9 @@ class RescueFundApplicationsService extends IService
         $appInfo = $this->rescueFundApplicationsRepository->findById($id);
         if (!$appInfo){
             throw new BusinessException(code: ResultCode::UNPROCESSABLE_ENTITY);
+        }
+        if( !empty($appInfo['sqxx_id'])){
+            throw new BusinessException(code: ResultCode::UNPROCESSABLE_ENTITY,message: '数据请勿重复提交');
         }
 
         $data = [

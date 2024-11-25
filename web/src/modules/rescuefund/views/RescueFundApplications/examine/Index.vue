@@ -13,7 +13,9 @@
     <!-- 数据加载完成后显示的实际内容 -->
     <template v-if="application.id">
       <el-alert :closable="false" type="success" class="relative">
-        <span class="text-base">申请费用类型：{{getDictLabel('rescue-fund-apply_fee_type', application.apply_fee_type)}}</span>
+        <span class="text-base">申请费用类型：{{getDictLabel('rescue-fund-apply_fee_type', application.apply_fee_type)}}
+          <span v-if="application.sqxx_id" class="ml-2 color-red font-bold">申请单号：{{application.sqxx_id}}</span>
+        </span>
         <div  class="absolute right-0 top-1/2 transform -translate-y-1/2">
 
           <!-- 操作按钮 Section -->
@@ -34,7 +36,7 @@
       <el-tabs v-model="activeName" class="demo-tabs" @tab-change="handleClick">
         <el-tab-pane label="基础信息" name="info">
           <!-- 受害人信息 Section -->
-          <el-descriptions title="受害人信息" border direction="vertical">
+          <el-descriptions title="受害人信息" border direction="vertical"  style="margin-top: 20px;">
             <el-descriptions-item label="姓名">{{ application.shr_name }}</el-descriptions-item>
             <el-descriptions-item label="联系方式">{{ application.shr_phone }}</el-descriptions-item>
             <el-descriptions-item label="证件类型">{{ getDictLabel('rescue-fund-credentials_type', application.shr_credentials_type) }}</el-descriptions-item>
@@ -83,6 +85,12 @@
           <!-- 将 applicationId 传递给子组件 -->
           <file-manager :applicationId="applicationId" />
         </el-tab-pane>
+
+<!--        <el-tab-pane label="审核结果" name="state" v-if="application.sqxx_id">-->
+<!--          &lt;!&ndash; 将 applicationId 传递给子组件 &ndash;&gt;-->
+<!--          <file-manager :applicationId="applicationId" />-->
+<!--        </el-tab-pane>-->
+
       </el-tabs>
 
     </template>
@@ -132,6 +140,7 @@ const view_files_func = async (id: string) => {
     if (response.code === 200 && response.data) {
       files_data.value = response.data; // 设置返回的数据
       loading.value = false; // 加载完成
+     // msg.success('文件上传完成')
     } else {
       msg.error('无法获取到文件数据');
     }
@@ -149,8 +158,9 @@ const applyFunc = async () => {
     if (response.code === 200 && response.data) {
       files_data.value = response.data; // 设置返回的数据
       loading.value = false; // 加载完成
+      msg.success('提交完成')
     } else {
-      msg.error('无法获取到文件数据');
+      msg.error('提交失败');
     }
   } catch (error) {
     msg.error('请求失败，请稍后再试');

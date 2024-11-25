@@ -163,18 +163,15 @@ export default function getFormItems(formType: 'add' | 'edit' = 'add', t: any, m
     //   },
     // }
     {
-      label: '事故描述',
+      label: '事故类型',
       prop: 'accident_type',
-      cols: { md: 24, xs: 24 },
-      render: () => XyWangEditor,
+      cols: { md: 12, xs: 24 },
+      render: () => MaDictRadio,
       renderProps: {
-        // modelValue: formData.accident_description, // 绑定内容
-        height: 350, // 可调整编辑器的高度
+        renderMode: 'normal',
+        data:options
       },
-      itemProps: {
-        rules: [{ required: true, message: '请输入事故描述', trigger: 'blur' }],
-      },
-    }
+    },
 
     // {
     //   label: '事故类型',

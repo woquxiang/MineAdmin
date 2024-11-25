@@ -82,6 +82,19 @@ const options = ref<MaProTableOptions>({
     on: {
       // 表格选择事件
       onSelectionChange: (selection: any[]) => selections.value = selection,
+      onSortChange: (sortField: string, sortOrder: string) => {
+        // 获取当前的搜索表单数据
+        const currentSearchForm = proTableRef.value.getSearchForm() || {}
+
+        // 更新排序字段和排序方向
+        const updatedSearchForm = {
+          ...currentSearchForm,  // 合并已有的表单数据
+          order_by: sortField.prop,  // 排序字段
+          order_by_direction: sortField.order === 'ascending' ? 'asc' : 'desc',  // 排序方向
+        }
+
+        proTableRef.value.setRequestParams(updatedSearchForm,true)
+      },
     },
   },
   // 搜索参数
