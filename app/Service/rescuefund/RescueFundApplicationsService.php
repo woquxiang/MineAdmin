@@ -20,8 +20,19 @@ class RescueFundApplicationsService extends IService
         protected readonly RoadFundApplication $roadFundApplication,
         protected readonly FilesRepository $filesRepository,
         protected readonly RescueFundApplicationsRepository $rescueFundApplicationsRepository,
-
+        protected readonly RegionsService $regionsService
     ) {}
+
+    public function page(array $params, int $page = 1, int $pageSize = 10): array
+    {
+        $results = $this->repository->page($params, $page, $pageSize);
+
+        foreach ($results['list'] as &$result) {
+            $result = array_merge($result,$this->regionsService->getRegionNamesByFundId($result['id']));
+        }
+
+        return $results;
+    }
 
     public function getUserDetail(int $id, int $createdBy): ?RescueFundApplications
     {

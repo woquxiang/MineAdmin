@@ -10,6 +10,7 @@
 import type { MaFormItem } from '@mineadmin/form'
 import type { RoleVo } from '~/base/api/role.ts'
 import MaDictRadio from '@/components/ma-dict-picker/ma-dict-radio.vue'
+import XyWangEditor from '@/components/xy-wang-editor/index.vue'
 
 import { h } from 'vue';
 import { ElSelect, ElOption } from 'element-plus';
@@ -162,18 +163,19 @@ export default function getFormItems(formType: 'add' | 'edit' = 'add', t: any, m
     //   },
     // }
     {
-      label: '事故类型',
+      label: '事故描述',
       prop: 'accident_type',
-      cols: { md: 12, xs: 24 },
-      render: () => MaDictRadio,
+      cols: { md: 24, xs: 24 },
+      render: () => XyWangEditor,
       renderProps: {
-        renderMode: 'normal',
-        data:options
+        // modelValue: formData.accident_description, // 绑定内容
+        height: 350, // 可调整编辑器的高度
       },
       itemProps: {
-        rules: [{ required: true}],
+        rules: [{ required: true, message: '请输入事故描述', trigger: 'blur' }],
       },
-    },
+    }
+
     // {
     //   label: '事故类型',
     //   prop: 'accident_type',

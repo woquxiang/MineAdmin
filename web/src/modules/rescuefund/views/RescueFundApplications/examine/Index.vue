@@ -54,8 +54,8 @@
 
           <!-- 受害人关系和申请信息 Section -->
           <el-descriptions title="受害人关系和申请信息" border direction="vertical" style="margin-top: 20px;">
-            <el-descriptions-item label="与受害人关系"> {{ application.shr_relationship_type }}</el-descriptions-item>
-            <el-descriptions-item label="亲属联系方式">{{ application.relatives_phone || 'N/A' }}</el-descriptions-item>
+            <el-descriptions-item label="与受害人关系"> {{getDictLabel('rescue-fund-shr_relationship_type', application.shr_relationship_type)}}</el-descriptions-item>
+            <el-descriptions-item label="亲属联系方式">{{ application.relatives_phone || '' }}</el-descriptions-item>
             <el-descriptions-item label="是否个人">{{ application.is_people === '1' ? '是' : '否' }}</el-descriptions-item>
             <el-descriptions-item label="医疗/殡葬机构">{{ application.ent_name }}</el-descriptions-item>
             <el-descriptions-item label="来源渠道"> {{ getDictLabel('rescue-fund-channel_type', application.channel_type) }} </el-descriptions-item>
@@ -63,7 +63,7 @@
 
           <!-- 申请经办人信息 Section -->
           <el-descriptions title="申请经办人信息" border direction="vertical" style="margin-top: 20px;">
-            <el-descriptions-item label="经办人姓名">{{ application.sqjbr_name || 'N/A' }}</el-descriptions-item>
+            <el-descriptions-item label="经办人姓名">{{ application.sqjbr_name || '' }}</el-descriptions-item>
             <el-descriptions-item label="经办人联系方式">{{ application.sqjbr_phone }}</el-descriptions-item>
             <el-descriptions-item label="经办人证件类型">{{ getDictLabel('rescue-fund-credentials_type', application.sqjbr_credentials_type) }}</el-descriptions-item>
             <el-descriptions-item label="经办人证件号">{{ application.sqjbr_credentials_code }}</el-descriptions-item>

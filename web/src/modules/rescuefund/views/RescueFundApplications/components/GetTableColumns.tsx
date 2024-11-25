@@ -96,11 +96,26 @@ export default function getTableColumns(dialog: UseDialogExpose, formRef: any, t
                           }
                         },
                         { label: () => '证件号', prop: 'sqjbr_credentials_code' },
-                        { label: () => '与受害人关系', prop: 'shr_relationship_type' },
+                        { label: () => '与受害人关系', prop: 'shr_relationship_type',
+                          cellRender: ({ row }) =>{
+                            const label =  getLabelFromDict('rescue-fund-shr_relationship_type', row.shr_relationship_type)
+                            return (
+                              <ElTag
+                                type="primary"
+                              >
+                                {label}
+                              </ElTag>
+                            )
+                          }
+                        },
                       ] },
                     { label: () => '亲属联系方式', prop: 'relatives_phone',width:'100px'  },
-                    { label: () => '是否个人', prop: 'is_people',width:'100px'  },
-                    { label: () => '医疗/殡葬机构', prop: 'ent_name' ,width:'100px' },
+                    { label: () => '是否个人', prop: 'is_people',width:'100px' ,
+                        cellRender:({row})=>{
+                          return row.is_people == 1  ? '是':'否'
+                        }
+                     },
+                    { label: () => '医疗/殡葬机构', prop: 'ent_name' ,width:'100px'},
                     { label: () => '来源渠道', prop: 'channel_type',width:'100px'  },
                     { label: () => '创建时间', prop: 'created_at',width:'100px'  },
                     { label: () => '更新时间', prop: 'updated_at',width:'100px'  },

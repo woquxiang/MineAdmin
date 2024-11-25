@@ -6,6 +6,7 @@ use App\Exception\BusinessException;
 use App\Http\Common\ResultCode;
 use App\Repository\rescuefund\FilesRepository;
 use App\Service\rescuefund\FilesService;
+use App\Service\rescuefund\RegionsService;
 use App\Service\rescuefund\RescueFundApplicationsService as Service;
 use App\Http\Admin\Request\rescuefund\RescueFundApplicationsRequest as Request;
 use Hyperf\HttpServer\Contract\RequestInterface;
@@ -37,7 +38,8 @@ class RescueFundApplicationsController extends AbstractController
         private readonly Service $service,
         protected readonly FilesService $filesService,
         protected readonly FilesRepository $filesRepository,
-        private readonly CurrentUser $currentUser
+        private readonly CurrentUser $currentUser,
+        protected readonly RegionsService $regionsService
     ) {}
 
     #[Get(
@@ -100,7 +102,12 @@ class RescueFundApplicationsController extends AbstractController
     #[Permission(code: 'rescuefund:rescue_fund_applications:detail')]
     public function details(int $id,RequestInterface $request): Result
     {
-        return $this->success($this->service->findById($id));
+        $result = $this->service->findById($id);
+        if(!$result){
+            throw new BusinessException(ResultCode::UNPROCESSABLE_ENTITY, '没有找到记录');
+        }
+
+        return $this->success(array_merge($result->toArray(),$this->regionsService->getRegionNamesByFundId($id)));
     }
 
     #[Delete(

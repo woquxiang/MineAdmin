@@ -136,7 +136,52 @@ final class FrontmachineController extends AbstractController
         $uploadFile->moveTo($newTmpPath);
         $splFileInfo = new SplFileInfo($newTmpPath, '', '');
         return $this->success(
-            [$this->service->upload($splFileInfo, $uploadFile, 1),$request->post('id')]
+            $this->service->upload($splFileInfo, $uploadFile, 1)
         );
+    }
+
+    #[Post(
+        path: '/v1/front-machine/i3',
+        operationId: 'front-machine-i3',
+        summary: '交警-2',
+        tags: ['api'],
+    )]
+    public function i3(RequestInterface $request)
+    {
+        //return $this->success($request->file('file'));
+        $uploadFile = $request->getUploadedFiles();
+
+        $fileKey = key($uploadFile); // 获取数组的第一个键（字段名）
+        $uploadFile = reset($uploadFile); // 获取第一个文件
+
+        $newTmpPath = sys_get_temp_dir() . '/' . uniqid() . '.' . $uploadFile->getExtension();
+        $uploadFile->moveTo($newTmpPath);
+        $splFileInfo = new SplFileInfo($newTmpPath, '', '');
+        return json_encode([
+            'code'=>200,
+            'errno'=>0,
+            'data'=> $this->service->upload($splFileInfo, $uploadFile, 1)
+        ]);
+    }
+
+    #[Post(
+        path: '/v1/front-machine/i4',
+        operationId: 'front-machine-i4',
+        summary: '交警-2',
+        tags: ['api'],
+    )]
+    public function i4(UploadRequest $request)
+    {
+        //return $this->success($request->file('file'));
+        $uploadFile = $request->file('file');
+        $newTmpPath = sys_get_temp_dir() . '/' . uniqid() . '.' . $uploadFile->getExtension();
+        $uploadFile->moveTo($newTmpPath);
+        $splFileInfo = new SplFileInfo($newTmpPath, '', '');
+
+        return json_encode([
+            'code'=>200,
+            'errno'=>0,
+            'data'=> $this->service->upload($splFileInfo, $uploadFile, 1)
+        ]);
     }
 }
