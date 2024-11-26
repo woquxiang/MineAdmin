@@ -50,7 +50,7 @@ export default function getTableColumns(dialog: UseDialogExpose, formRef: any, t
     // 索引序号列
     { type: 'index',label:'序号',width:'60px'},
     // 普通列
-    { label: () => '主键ID', prop: 'id'},
+    { label: () => '主键ID', prop: 'id',width:'100px'},
     { label: () => '费用类型', prop: 'apply_fee_type',width:'100px' ,
                       cellRender: ({ row }) =>{
                         const label =  getLabelFromDict('rescue-fund-apply_fee_type', row.apply_fee_type)

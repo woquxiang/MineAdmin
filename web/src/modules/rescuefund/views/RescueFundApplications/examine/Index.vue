@@ -14,14 +14,17 @@
     <template v-if="application.id">
       <el-alert :closable="false" type="success" class="relative">
         <span class="text-base">申请费用类型：{{getDictLabel('rescue-fund-apply_fee_type', application.apply_fee_type)}}
-          <span v-if="application.sqxx_id" class="ml-2 color-red font-bold">申请单号：{{application.sqxx_id}}</span>
+          <el-link v-if="application.sqxx_id" @click="linkPage"
+                class="ml-2 color-red font-bold">申请单号：{{application.sqxx_id}}
+          </el-link>
         </span>
         <div  class="absolute right-0 top-1/2 transform -translate-y-1/2">
 
           <!-- 操作按钮 Section -->
             <template v-if="application.is_approved === 1">
               <el-button type="info"  disabled class="w-32">已审核</el-button>
-              <el-button @click="applyFunc" type="primary" >提交申请</el-button>
+              <el-button v-if="!application.sqxx_id" @click="applyFunc" type="primary" >提交申请</el-button>
+              <el-button v-else @click="applyFunc" type="primary" disabled >已提交</el-button>
             </template>
             <template  v-else-if="application.is_approved === 0">
               <el-button type="primary" @click.once="approveApplication(1)" class="w-32">通过审核</el-button>
@@ -104,6 +107,8 @@ import {apply, approve, detail, view_files} from '~/rescuefund/api/RescueFundApp
 import { ElMessage } from 'element-plus';
 import {useMessage} from "@/hooks/useMessage";
 import FileManager from "~/rescuefund/views/RescueFundApplications/examine/fileManager.vue";
+import useTabStore from '@/store/modules/useTabStore'
+
 
 // 定义 application 数据和加载状态
 const dictStore = useDictStore();
@@ -115,6 +120,10 @@ const activeName = ref('info')
 
 // 获取路由中的应用ID
 const route = useRoute();
+const router = useRouter()
+const tabStore = useTabStore()
+
+
 const applicationId = route.params.id as string;
 
 // 请求数据
@@ -216,6 +225,22 @@ const handleClick = (name)=>{
 const rejectApplication = () => {
   console.log('拒绝申请');
 };
+const linkPage=()=>{
+  //这里写 判断是否有/rescuefund/RescueFundStatus标签页。
+  const targetPath = '/rescuefund/RescueFundStatus'
+
+  // 查找是否已有目标标签页
+  const existingTab = tabStore.tabList.find(tab => tab.path === targetPath)
+
+  if (existingTab) {
+    // 如果存在，则先关闭该标签页
+    tabStore.closeTab(existingTab)
+  }
+
+  router.push({
+    path: `/rescuefund/RescueFundStatus`, query: {application_id:applicationId}}
+  )
+}
 </script>
 
 <style scoped>

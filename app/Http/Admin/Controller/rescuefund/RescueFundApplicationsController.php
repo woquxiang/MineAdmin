@@ -10,6 +10,7 @@ use App\Service\rescuefund\FilesService;
 use App\Service\rescuefund\RegionsService;
 use App\Service\rescuefund\RescueFundApplicationsService as Service;
 use App\Http\Admin\Request\rescuefund\RescueFundApplicationsRequest as Request;
+use App\Service\rescuefund\RescueFundStatusService;
 use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\Swagger\Annotation as OA;
 use App\Http\Admin\Controller\AbstractController;
@@ -42,6 +43,7 @@ class RescueFundApplicationsController extends AbstractController
         private readonly CurrentUser $currentUser,
         protected readonly RegionsService $regionsService,
         protected readonly RoadFundApplication $roadFundApplication,
+        protected readonly RescueFundStatusService $rescueFundStatusService
     ) {}
 
     #[Get(
@@ -109,8 +111,8 @@ class RescueFundApplicationsController extends AbstractController
             throw new BusinessException(ResultCode::UNPROCESSABLE_ENTITY, '没有找到记录');
         }
 
-        $result1 = $this->roadFundApplication->getApplicationById(['id'=>$result['sqxx_id']]);
-        var_dump($result1);
+        //$result1 = $this->roadFundApplication->getApplicationById(['id'=>$result['sqxx_id']]);
+        $this->rescueFundStatusService->syncDataByApplicationId($result->id);
 
         return $this->success(array_merge($result->toArray(),$this->regionsService->getRegionNamesByFundId($id)));
     }

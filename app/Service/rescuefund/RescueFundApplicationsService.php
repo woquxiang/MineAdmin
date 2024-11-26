@@ -8,9 +8,10 @@ use App\Http\Common\ResultCode;
 use App\Model\rescuefund\RescueFundApplications;
 use App\Repository\rescuefund\FilesRepository;
 use App\Repository\rescuefund\RescueFundApplicationsRepository;
+use App\Repository\rescuefund\RescueFundStatusRepository;
 use App\Service\IService;
 use App\Repository\rescuefund\RescueFundApplicationsRepository as Repository;
-
+use Hyperf\Collection\Arr;
 
 
 class RescueFundApplicationsService extends IService
@@ -20,7 +21,8 @@ class RescueFundApplicationsService extends IService
         protected readonly RoadFundApplication $roadFundApplication,
         protected readonly FilesRepository $filesRepository,
         protected readonly RescueFundApplicationsRepository $rescueFundApplicationsRepository,
-        protected readonly RegionsService $regionsService
+        protected readonly RegionsService $regionsService,
+        protected readonly RescueFundStatusRepository $rescueFundStatusRepository,
     ) {}
 
     public function page(array $params, int $page = 1, int $pageSize = 10): array
@@ -38,6 +40,7 @@ class RescueFundApplicationsService extends IService
     {
         $result = $this->repository->getDetailByIdAndCreatedBy($id, $createdBy);
         $result->file_list = $this->filesRepository->findFilesByApplicationId($result->id);
+        $result->state_info = $this->rescueFundStatusRepository->findOneBySqxxId((string) $result->sqxx_id);
 
         return $result;
 //        return $this->repository->getDetailByIdAndCreatedBy($id, $createdBy);
