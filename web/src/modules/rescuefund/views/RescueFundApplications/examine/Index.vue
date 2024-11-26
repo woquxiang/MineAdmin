@@ -168,6 +168,7 @@ const applyFunc = async () => {
       files_data.value = response.data; // 设置返回的数据
       loading.value = false; // 加载完成
       msg.success('提交完成')
+      fetchApplicationDetail(applicationId);
     } else {
       msg.error('提交失败');
     }

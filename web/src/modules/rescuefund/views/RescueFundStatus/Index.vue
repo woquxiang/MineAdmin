@@ -155,6 +155,12 @@ const handleTabManagement = () => {
   if (existingTab) {
     tabStore.closeTab(existingTab);
   }
+
+  // if(query.application_id != undefined){
+  //   tabStore.changeTabTitle('垫付管理' + query.application_id)
+  // }else{
+  //   tabStore.changeTabTitle('垫付管理')
+  // }
 };
 
 // 监听 query 参数的变化
