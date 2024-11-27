@@ -24,5 +24,6 @@ declare module 'vue' {
     Panel: typeof import('./../src/components/ma-resource-picker/panel.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    XyWangEditor: typeof import('./../src/components/xy-wang-editor/index.vue')['default']
   }
 }

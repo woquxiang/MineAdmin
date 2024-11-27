@@ -96,6 +96,7 @@ export default function getTableColumns(dialog: UseDialogExpose, formRef: any, t
                       }
                     },
                     { label: () => '退回原因', prop: 'return_reason' },
+                    { label: () => '更新时间', prop: 'updated_at',width:'200px' },
     // 操作列
     // {
     //   type: 'operation',

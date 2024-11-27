@@ -36,7 +36,8 @@ const editorConfig = {
   MENU_CONF: {
     uploadImage: {
       show: false, // 禁用图片上传按钮
-      server: 'http://127.0.0.1:9501/v1/front-machine/i4', // 配置图片上传接口
+      // server: 'http://127.0.0.1:9501/v1/front-machine/i4', // 配置图片上传接口
+      server: 'https://dev.ycjjwx.com/prod/v1/front-machine/i4', // 配置图片上传接口
       fieldName: 'file', // 接口接收图片的字段名
       headers: {
         Authorization: 'Bearer your-token', // 如果需要携带认证信息

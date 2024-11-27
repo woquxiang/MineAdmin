@@ -155,6 +155,9 @@ export default function getTableColumns(dialog: UseDialogExpose, formRef: any, t
             show: ({ row }) => showBtn('rescuefund:rescue_fund_applications:delete', row),
             icon: 'i-heroicons:trash',
             text: () => t('crud.delete'),
+            linkProps: {
+              type:"danger"
+            },
             onClick: ({ row }, proxy: MaProTableExpose) => {
               msg.delConfirm(t('crud.delDataMessage')).then(async () => {
                 const response = await deleteByIds([row.id])

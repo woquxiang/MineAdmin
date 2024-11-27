@@ -10,6 +10,8 @@
 import type { MaFormItem } from '@mineadmin/form'
 import type { NewsVo } from '~/content/api/News.ts'
 import XyWangEditor from "@/components/xy-wang-editor/index.vue";
+import MaUploadImage from '@/components/ma-upload-image/index.vue'
+
 
 export default function getFormItems(formType: 'add' | 'edit' = 'add', t: any, model: NewsVo): MaFormItem[] {
   // 新增默认值
@@ -32,6 +34,18 @@ export default function getFormItems(formType: 'add' | 'edit' = 'add', t: any, m
         rules: [{ required: true, message: '标题' }],
       },
                 },
+    // {
+    //   label: '封面',
+    //   prop: 'pic',
+    //   render: () => MaUploadImage,
+    //   itemProps: {
+    //     rules: [{ required: true, message: '标题' }],
+    //   },
+    //   renderProps:{
+    //     limit:1,
+    //     multiple:false
+    //   }
+    // },
                     {
       label: '简短描述',
       prop: 'short_description',

@@ -2,6 +2,7 @@
 
 namespace App\Model\rescuefund;
 
+use Hyperf\Database\Model\SoftDeletes;
 use Hyperf\DbConnection\Model\Model as MineModel;
 
 
@@ -34,6 +35,8 @@ use Hyperf\DbConnection\Model\Model as MineModel;
 */
 class RescueFundApplications extends MineModel
 {
+    use SoftDeletes;
+
     protected ?string $table = 'rescue_fund_applications';
 
     protected array $fillable = ['id','apply_fee_type','sg_time','sg_prov','sg_city','sg_area','sg_address','shr_name','shr_phone','shr_credentials_type','shr_credentials_code','identity_card_address','current_residence_address','sqjbr_name','sqjbr_phone','sqjbr_credentials_type','sqjbr_credentials_code','shr_relationship_type','relatives_phone','is_people','ent_name','channel_type','created_at','updated_at','created_by','updated_by','is_approved'];

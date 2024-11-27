@@ -151,12 +151,12 @@ function handleDelete() {
       >
         <template #actions>
 
-          <el-button
-            type="danger"
-            @click="() =>router.push({'path':'/test/second/create'}) "
-          >
-            新页面
-          </el-button>
+<!--          <el-button-->
+<!--            type="danger"-->
+<!--            @click="() =>router.push({'path':'/test/second/create'}) "-->
+<!--          >-->
+<!--            新页面-->
+<!--          </el-button>-->
 
           <el-button
             v-auth="['permission:role:save']"
