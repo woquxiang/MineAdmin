@@ -19,7 +19,7 @@ const appTitle = ref<string>(import.meta.env.VITE_APP_TITLE)
 <template>
   <div class="relative w-auto flex items-center gap-x-3">
     <img :alt="appTitle" :src="LogoSvg" class="login-logo">
-    <h3 class="text-4xl text-white tracking-[3px] lg:text-[#2d2d33ff]">
+    <h3 class="text-2xl text-white tracking-[3px] lg:text-[#2d2d33ff]  min-w-[12.5rem]">
       {{ appTitle }}
     </h3>
 <!--    <div class="pure-tag">-->

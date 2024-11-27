@@ -16,12 +16,21 @@ import OneWord from './components/one-word.vue'
 import Logo from './components/logo.vue'
 import LoginForm from './components/login-form.vue'
 import CopyRight from './components/copyright.vue'
+import CarPng from '@/assets/images/img.png'
+
 </script>
 
 <template>
   <div class="h-full min-w-[380px] w-full flex items-center justify-center overflow-hidden border-1 bg-blue-950 lg:justify-between lg:bg-white">
     <div class="relative hidden h-full w-10/12 md:hidden lg:flex">
-      <div class="gradient-rainbow" />
+      <div class="gradient-rainbow"
+           :style="{
+        backgroundImage: `url(${CarPng})`,
+        backgroundPosition: 'center',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat'
+      }"  />
+
       <Dashed />
       <Light />
       <Slogan />
