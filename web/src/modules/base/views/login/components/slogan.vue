@@ -18,7 +18,8 @@ const appTitle = ref<string>(import.meta.env.VITE_APP_TITLE)
 <template>
   <div class="absolute left-10 z-10 w-[80%] text-white">
     <p class="mt-5 text-[35px] font-bold">
-      {{ appTitle }} <span class="text-sm">v{{ pkg.version }}</span>
+      {{ appTitle }}
+<!--      <span class="text-sm">v{{ pkg.version }}</span>-->
     </p>
 
 <!--    <div class="slogan">-->

@@ -27,11 +27,12 @@ const setting: SystemSettings.copyright = settingStore.getSettings('copyright')
 
 <template>
   <div class="absolute bottom-5 z-30 w-[335px] text-center text-sm text-gray-3 lg:text-gray-5">
-    <div class="mb-1 flex justify-center gap-x-2 text-sm">
-      <a v-for="item in userStore.getLocales()" class="trans-link" @click="() => switchLanguage(item.value)">
-        {{ item.label }}
-      </a>
-    </div>
+<!--    多语言 -->
+<!--    <div class="mb-1 flex justify-center gap-x-2 text-sm">-->
+<!--      <a v-for="item in userStore.getLocales()" class="trans-link" @click="() => switchLanguage(item.value)">-->
+<!--        {{ item.label }}-->
+<!--      </a>-->
+<!--    </div>-->
     <div class="flex justify-center gap-x-2.5">
       <p class="flex items-center justify-center text-sm">
         <ma-svg-icon name="lucide:copyright" />

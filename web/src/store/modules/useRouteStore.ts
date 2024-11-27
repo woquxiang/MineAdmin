@@ -58,7 +58,7 @@ const useRouteStore = defineStore(
         component: () => import('@/layouts'),
         redirect: welcomePage.path,
         children: [
-          /*** 屏蔽了 欢迎页 去掉 不然会只一个
+
           Object.assign(welcomeRoute, {
             name: welcomePage.name,
             path: welcomePage.path,
@@ -69,12 +69,12 @@ const useRouteStore = defineStore(
               type: 'M',
               affix: true,
               breadcrumbEnable: true,
-              copyright: true,
+              copyright: false,
               cache: true,
             },
           }),
-           ***/
-          toRecordRawRoute(dashboardRoute),
+
+          // toRecordRawRoute(dashboardRoute),
           toRecordRawRoute({
             path: '/:pathMatch(.*)*',
             name: 'MineSystemError',

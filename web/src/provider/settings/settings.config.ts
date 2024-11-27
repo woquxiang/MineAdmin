@@ -19,12 +19,12 @@ const globalConfigSettings: SystemSettings.all = {
   app: {
     asideDark:true
   },
-  welcomePage: {
-    name: 'dashboard:workbench',
-    path: '/dashboard/workbench',
-    title: '工作台',
-    icon: 'icon-park-outline:jewelry',
-  },
+  // welcomePage: {
+  //   name: 'dashboard:workbench',
+  //   path: '/dashboard/workbench',
+  //   title: '工作台',
+  //   icon: 'icon-park-outline:jewelry',
+  // },
 }
 
 export default globalConfigSettings
