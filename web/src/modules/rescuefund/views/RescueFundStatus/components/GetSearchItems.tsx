@@ -16,10 +16,16 @@ export default function getSearchItems(t: any): MaSearchItem[] {
       label: () => '申请ID',
       prop: 'application_id',
       render: () =><el-input/>,
+      renderProps: {
+        placeholder:'请输入申请ID',
+      },
     },
     {
       label: () => '垫付ID',
       prop: 'sqxx_id',
       render: () =><el-input/>,
+      renderProps: {
+        placeholder:'请输入垫付ID',
+      },
     },                                                                       ]
 }

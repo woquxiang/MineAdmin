@@ -15,22 +15,18 @@ export default function getSearchItems(t: any): MaSearchItem[] {
                     {
       label: () => '标题',
       prop: 'title',
-                      render: 'input',
+      render: 'input',
+      renderProps: {
+        placeholder:'请输入标题',
+      },
           },
                 {
       label: () => '简短描述',
       prop: 'short_description',
-                  render: 'input',
-          },
-                {
-      label: () => '详情',
-      prop: 'content',
-                  render: 'input',
-          },
-                                                        {
-      label: () => '作者',
-      prop: 'author',
-                                                          render: 'input',
-          },
+      render: 'input',
+      renderProps: {
+        placeholder:'请输入简短描述',
+      },
+          }
           ]
 }

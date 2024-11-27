@@ -34,7 +34,8 @@ export default function getSearchItems(t: any): MaSearchItem[] {
         </el-select>
       ),
       renderProps: {
-        // 如果需要其他配置，可以添加在这里
+        renderMode: 'normal',
+        placeholder:'请选择审核状态',
       },
     },
     {
@@ -45,6 +46,7 @@ export default function getSearchItems(t: any): MaSearchItem[] {
         renderMode: 'normal',
         dictName:'rescue-fund-apply_fee_type',
         clearable:true,
+        placeholder:'请选择申请费用类型',
       },
     },
     {

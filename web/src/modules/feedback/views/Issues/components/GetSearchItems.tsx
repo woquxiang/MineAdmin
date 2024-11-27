@@ -15,12 +15,18 @@ export default function getSearchItems(t: any): MaSearchItem[] {
                     {
       label: () => '投诉建议的内容',
       prop: 'content',
-                      render: () => <el-input/>,
+      render: () => <el-input/>,
+      renderProps: {
+        placeholder:'请输入投诉建议的内容',
+      },
           },
                 {
       label: () => '联系方式',
       prop: 'contact_info',
-                  render: () => <el-input/>,
+      render: () => <el-input/>,
+      renderProps: {
+        placeholder:'请输入联系方式',
+      },
           },
                                           ]
 }
