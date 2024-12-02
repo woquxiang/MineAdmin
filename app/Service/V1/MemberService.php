@@ -21,6 +21,7 @@ use App\Repository\J123\J123EventRepository;
 use App\Repository\J123\J123PeopleRepository;
 use App\Repository\Permission\UserRepository;
 use App\Service\IService;
+use EasyWeChat\MiniApp\Application;
 
 final class MemberService extends IService
 {
@@ -36,7 +37,7 @@ final class MemberService extends IService
      * @param string $idCardNumber
      * @return bool
      */
-    public function updateIdCardInfo(string $idCardName, string $idCardNumber): ?User
+    public function updateIdCardInfo(string $idCardName, string $idCardNumber,string $verifyResult): ?User
     {
         // 获取当前用户ID
         $userId = $this->currentUser->id();
@@ -46,6 +47,27 @@ final class MemberService extends IService
 
         if (!$user) {
             throw new BusinessException(ResultCode::UNPROCESSABLE_ENTITY, '获取手机号失败');
+        }
+
+        // 通过 EasyWeChat 获取用户信息
+        $config = config('easywechat');  // 获取配置
+        $miniApp = new Application($config);
+
+        try {
+            $response =  $miniApp->getClient()->postJson('cityservice/face/identify/getinfo', [
+                'verify_result'=>$verifyResult
+            ])->toArray();
+
+            if (!isset($response['errcode']) || $response['errcode'] != 0 ) {
+                throw new BusinessException(ResultCode::UNPROCESSABLE_ENTITY);
+            }
+        } catch (\Throwable $e) {
+            throw new BusinessException(ResultCode::UNPROCESSABLE_ENTITY, '认证失败');
+        }
+
+        //判断身份证
+        if(md5($idCardNumber) !== $response['id_card_number_md5']){
+            throw new BusinessException(ResultCode::UNPROCESSABLE_ENTITY, '认证失败，身份信息不匹配');
         }
 
         // 更新身份证信息

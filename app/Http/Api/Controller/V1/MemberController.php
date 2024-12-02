@@ -43,13 +43,14 @@ final class MemberController extends AbstractController
     {
         $idCardName = $request->post('id_card_name');
         $idCardNumber = $request->post('id_card_number');
+        $verifyResult = $request->post('verify_result');
 
-        if(empty($idCardNumber) || empty($idCardName)){
+        if(empty($idCardNumber) || empty($idCardName) || empty($verifyResult)){
             throw new BusinessException(ResultCode::UNPROCESSABLE_ENTITY, '参数错误');
         }
 
         try {
-            $info = $this->service->updateIdCardInfo($idCardName, $idCardNumber);
+            $info = $this->service->updateIdCardInfo($idCardName, $idCardNumber,$verifyResult);
             return $this->success($info,'身份证信息更新成功');
         } catch (\Exception $e) {
             return $this->error('更新失败');
