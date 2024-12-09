@@ -58,7 +58,7 @@ class RescueFundStatusService extends IService
         } catch (\Throwable $e) {
             // 记录日志或处理异常
             // Log::error('同步数据失败：' . $e->getMessage());
-            //throw new BusinessException(code: ResultCode::FAIL, message: '同步失败: ' . $e->getMessage());
+            throw new BusinessException(code: ResultCode::FAIL, message: '同步失败: ' . $e->getMessage());
             return false;
         }
     }
