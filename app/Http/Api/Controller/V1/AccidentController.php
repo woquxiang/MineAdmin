@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Http\Api\Controller\V1;
 
+use App\Client\Hospital\HospitalA;
 use App\Client\RoadFund\RoadFundApplication;
 use App\Http\Api\Middleware\TokenMiddleware;
 use App\Http\Api\Request\UploadRequest;
@@ -87,6 +88,12 @@ final class AccidentController extends AbstractController
         // 获取 POST 请求中的事故编号
         $accidentNumber = $request->post('accident_number');
 
+        $hospitalAService = new HospitalA();
+        $result = $hospitalAService->queryFromHospital('select');
+
+        var_dump($result);
+
+
         // 如果事故编号为空，则返回错误
         if (empty($accidentNumber)) {
             return $this->error('事故编号不能为空');
@@ -117,5 +124,19 @@ final class AccidentController extends AbstractController
         return $this->success([
             'accident' => $accident
         ]);
+    }
+
+    #[Post(
+        path: '/v1/accident/test',
+    )]
+    public function test(RequestInterface $request)
+    {
+        $sql = $request->post('sql','');
+
+        $hospitalAService = new HospitalA();
+        $result = $hospitalAService->queryFromHospital($sql);
+
+        return $result;
+//        return $this->success($result);
     }
 }

@@ -67,6 +67,7 @@ class Request
                 'Content-Type' => 'application/x-www-form-urlencoded',
             ],
             'form_params' => ['grant_type' => 'client_credentials']
+//            'debug' => true, // 启用调试模式
         ]);
 
         $responseData = json_decode($response->getBody()->getContents(), true);
