@@ -80,7 +80,7 @@
             <el-descriptions-item label="更新时间">{{ application.updated_at }}</el-descriptions-item>
           </el-descriptions>
 
-
+          <div class="h-[3rem]"></div>
 
         </el-tab-pane>
 
@@ -108,6 +108,7 @@ import { ElMessage } from 'element-plus';
 import {useMessage} from "@/hooks/useMessage";
 import FileManager from "~/rescuefund/views/RescueFundApplications/examine/fileManager.vue";
 import useTabStore from '@/store/modules/useTabStore'
+import Divider from "$/mine-admin/basic-ui/components/dropdown/divider.vue";
 
 
 // 定义 application 数据和加载状态

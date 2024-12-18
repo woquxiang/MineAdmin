@@ -31,10 +31,10 @@ class FundStateCrontab
         $this->logger = $loggerFactory->get('log', 'default');
     }
 
-//    #[Crontab( name:"updateState", rule: "*\/5 * * * * *", memo: "更新垫付接口信息")]
-    #[Crontab(name:"updateState", rule: "* *\/2 * * *", memo: "更新垫付接口信息")]
+    #[Crontab(name:"updateState", rule: "*/5 * * * *", memo: "更新垫付接口信息")]
     public function updateState()
     {
+        print_r('更新垫付数据当前时间' . date('Y-m-d H:i:s')  . PHP_EOL);
         // 获取超过4小时未同步的数据
         $outOfSyncData = $this->rescueFundStatusRepository->getOutOfSyncData();
 

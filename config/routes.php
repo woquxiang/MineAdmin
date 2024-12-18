@@ -18,3 +18,7 @@ Router::get('/', static function () {
 Router::get('/favicon.ico', static function () {
     return '';
 });
+
+Router::addServer('ws', function () {
+    Router::get('/video', 'App\Http\Admin\Controller\websocket\VideoController');
+});

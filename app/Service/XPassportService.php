@@ -125,6 +125,20 @@ final class XPassportService extends IService implements CheckTokenInterface
         ];
     }
 
+    public function loginWithH5(string $idCardName,string $idCardNumber, string $ip = '0.0.0.0', string $browser = 'unknown', string $os = 'unknown'): array
+    {
+        $user = $this->repository->findOrCreateByIdCard($idCardName,$idCardNumber);
+
+        // 生成 JWT
+        $this->dispatcher->dispatch(new UserLoginEvent($user, $ip, $os, $browser));
+        $jwt = $this->getApiJwt();
+        return [
+            'access_token' => $jwt->builderAccessToken((string) $user->id)->toString(),
+            'refresh_token' => $jwt->builderRefreshToken((string) $user->id)->toString(),
+            'expire_at' => (int) $jwt->getConfig('ttl', 0),
+        ];
+    }
+
     public function getPhoneNumber(int $userId, $code): string
     {
         // 通过 EasyWeChat 获取用户信息

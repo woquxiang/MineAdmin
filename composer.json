@@ -58,7 +58,7 @@
     "hyperf/validation": "~3.1",
     "hyperf/view": "^3.1",
     "hyperf/view-engine": "^3.1",
-    "w7corp/easywechat": "^6.7"
+    "hyperf/websocket-server": "^3.1",
     "mineadmin/access": "3.0",
     "mineadmin/app-store": "3.0",
     "mineadmin/auth-jwt": "3.0",
@@ -66,7 +66,8 @@
     "mineadmin/jwt": "3.0",
     "mineadmin/support": "3.0",
     "mineadmin/swagger": "3.0",
-    "mineadmin/upload": "3.0"
+    "mineadmin/upload": "3.0",
+    "w7corp/easywechat": "^6.7"
   },
   "require-dev": {
     "doctrine/dbal": "^3.6",

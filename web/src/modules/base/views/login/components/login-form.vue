@@ -14,7 +14,8 @@ import useUserStore from '@/store/modules/useUserStore.ts'
 import useSettingStore from '@/store/modules/useSettingStore.ts'
 
 const { t } = useI18n()
-const isProduction: boolean = import.meta.env.MODE === 'production'
+// const isProduction: boolean = import.meta.env.MODE === 'production'
+const isProduction = false
 const userStore = useUserStore()
 const settingStore = useSettingStore()
 const router = useRouter()
@@ -70,6 +71,21 @@ async function submit() {
     isFormSubmit.value = false
   }).catch(() => isFormSubmit.value = false)
 }
+
+// onMounted(() => {
+//   setTimeout(() => {
+//     const formElement = document.querySelector('.mine-login-form');
+//     if (formElement) {
+//       const submitEvent = new Event('submit', { bubbles: true });
+//       formElement.dispatchEvent(submitEvent);
+//     }
+//   }, 1000);
+// });
+
+// 自动触发登录
+onMounted(() => {
+  submit()
+})
 </script>
 
 <template>

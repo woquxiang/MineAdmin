@@ -40,6 +40,8 @@ import 'vue-m-message/dist/style.css'
 import '@/assets/styles/resources/variables.scss'
 import '@/assets/styles/resources/utils.scss'
 import '@/assets/styles/resources/element.scss'
+import '@/assets/styles/resources/yct.scss'
+// import '@/assets/styles/resources/yct_hide.scss'
 
 async function createI18nService(app: App) {
   const locales: any[] = Object.entries(import.meta.glob('./locales/*.y(a)?ml')).map(([key]: any) => {

@@ -66,7 +66,8 @@ class OperationMiddleware implements MiddlewareInterface
                 $this->user->id(),
                 $operator->summary,
                 $request->getUri()->getPath(),
-                Arr::first(array: $this->container->get(Request::class)->getClientIps(), callback: static fn ($val) => $val, default: '0.0.0.0'),
+//                Arr::first(array: $this->container->get(Request::class)->getClientIps(), callback: static fn ($val) => $val, default: '0.0.0.0'),
+                $this->getRealClientIp($request), // 使用自定义方法获取客户端 IP
                 $request->getMethod(),
             ));
         }
@@ -87,4 +88,25 @@ class OperationMiddleware implements MiddlewareInterface
         }
         return null;
     }
+
+    public function getRealClientIp(ServerRequestInterface $request): string
+    {
+        // 获取 X-Real-IP 头部
+        $realIp = $request->getHeaderLine('x-real-ip');
+
+        if ($realIp) {
+            return $realIp;
+        }
+
+        // 如果没有 X-Real-IP，检查 X-Forwarded-For 头部
+        $forwardedFor = $request->getHeaderLine('x-forwarded-for');
+        if ($forwardedFor) {
+            // 取第一个 IP 地址
+            return explode(',', $forwardedFor)[0];
+        }
+
+        // 如果都没有，返回 remote_addr
+        return $request->getServerParams()['remote_addr'] ?? '0.0.0.0';
+    }
+
 }

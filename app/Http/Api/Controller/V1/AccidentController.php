@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Http\Api\Controller\V1;
 
+use App\Client\Hospital\Hospital120;
 use App\Client\Hospital\HospitalA;
 use App\Client\RoadFund\RoadFundApplication;
 use App\Http\Api\Middleware\TokenMiddleware;
@@ -25,6 +26,7 @@ use App\Model\Jj\AccidentWounded;
 use App\Model\Jj\Driver;
 use App\Model\Jj\PartyDirectIndemnity;
 use App\Repository\rescuefund\RescueFundRegionsRepository;
+use App\Service\healthcare\TrafficIncidentsService;
 use App\Service\PassportService;
 use App\Service\rescuefund\RegionsService;
 use App\Service\V1\AttachmentService;
@@ -35,6 +37,7 @@ use App\Service\XPassportService;
 use Hyperf\DbConnection\Db;
 use Hyperf\HttpServer\Annotation\Middleware;
 use Hyperf\HttpServer\Contract\RequestInterface;
+use Hyperf\Redis\Redis;
 use Hyperf\Stringable\Str;
 use Hyperf\Swagger\Annotation\HyperfServer;
 use Hyperf\Swagger\Annotation\Post;
@@ -56,6 +59,8 @@ final class AccidentController extends AbstractController
         protected readonly RoadFundApplication $roadFundApplication,
         protected readonly RegionsService $regionsService,
         protected readonly RescueFundRegionsRepository $rescueFundRegionsRepository,
+        protected readonly TrafficIncidentsService $trafficIncidentsService,
+        protected readonly Redis $redis,
     ) {}
 
     #[Post(
@@ -85,13 +90,14 @@ final class AccidentController extends AbstractController
     )]
     public function details(RequestInterface $request)
     {
+
         // 获取 POST 请求中的事故编号
         $accidentNumber = $request->post('accident_number');
 
         $hospitalAService = new HospitalA();
         $result = $hospitalAService->queryFromHospital('select');
 
-        var_dump($result);
+        //var_dump($result);
 
 
         // 如果事故编号为空，则返回错误
@@ -132,11 +138,68 @@ final class AccidentController extends AbstractController
     public function test(RequestInterface $request)
     {
         $sql = $request->post('sql','');
+        $type = $request->post('type',1);
 
-        $hospitalAService = new HospitalA();
-        $result = $hospitalAService->queryFromHospital($sql);
+        if(1 == $type){
+            $hospitalService = new HospitalA();
+        }else{
+            $hospitalService = new Hospital120();
+        }
 
-        return $result;
+        $result = $hospitalService->queryFromHospital($sql);
+        return $this->success($result);
+
+//        if (env('APP_ENV') === 'prod') {
+//            // 生产环境逻辑
+//             return $this->success($result);
+//        } else {
+//            // 开发环境逻辑
+//            return $result ;
+//        }
+    }
+
+    #[Post(
+        path: '/v1/accident/alldata',
+    )]
+    public function alldata(RequestInterface $request)
+    {
+        $id = $request->post('id','');
+
+        $ser = $this->trafficIncidentsService->queryAllFromHospital();
+
+        //$this->redis->rPush('accident_ids_list', $id);
+
+        //$hospitalAService = new HospitalA();
+        //$result = $hospitalAService->queryFromHospital($sql);
+        return $ser ;
+//        return $this->success($result);
+    }
+
+    #[Post(
+        path: '/v1/accident/test222',
+    )]
+    public function test222(RequestInterface $request)
+    {
+        $id = $request->post('id','');
+
+        $serverParams = $request->getServerParams();
+        print_r($serverParams);
+        if (isset($serverParams['HTTP_X_FORWARDED_FOR'])) {
+            $ips = explode(',', $serverParams['HTTP_X_FORWARDED_FOR']);
+            $realIp = trim($ips[0]);
+            $serverParams['REMOTE_ADDR'] = $realIp;
+            print_r(333);
+            //$request = $request->withServerParams($serverParams);
+        }
+        print_r(444);
+
+        //$ser = $this->trafficIncidentsService->updateAllDataByAccidentIdAndPatientId('20241209-00785',7);
+
+        $this->redis->lPush('accident_ids_list', $id);
+
+        //$hospitalAService = new HospitalA();
+        //$result = $hospitalAService->queryFromHospital($sql);
+        return [] ;
 //        return $this->success($result);
     }
 }

@@ -14,6 +14,9 @@ error_reporting(E_ALL);
 ! defined('START_TIME') && define('START_TIME', time());    // 启动时间
 ! defined('HF_VERSION') && define('HF_VERSION', '3.1');     // 定义hyperf版本号
 
+// 临时设置环境变量
+putenv('APP_ENV=dev'); // 在这里修改环境变量33
+
 require BASE_PATH . '/vendor/autoload.php';
 
 // Self-called anonymous function that creates its own scope and keep the global namespace clean.

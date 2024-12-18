@@ -79,6 +79,7 @@ const options = ref<MaProTableOptions>({
   },
   // 表格参数
   tableOptions: {
+    border:true,
     on: {
       // 表格选择事件
       onSelectionChange: (selection: any[]) => selections.value = selection,

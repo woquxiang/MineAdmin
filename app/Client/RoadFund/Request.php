@@ -32,6 +32,8 @@ class Request
     // 获取 token（如果 token 无效，重新获取）
     public function getToken()
     {
+        print_r('当前token'.$this->token . PHP_EOL);
+        print_r('过期时间'.$this->tokenExpiry . PHP_EOL);
         if (!$this->token || $this->tokenExpiry < time()) {
             $this->requestToken();
         }
@@ -75,6 +77,7 @@ class Request
         if (isset($responseData['access_token'])) {
             $this->token = $responseData['access_token'];
             $this->tokenExpiry = time() + $responseData['expires_in'] - 60; // 提前 60 秒过期
+//            $this->tokenExpiry = time() + 3600; // 提前 60 秒过期
         } else {
             throw new \Exception('获取 Token 失败: ' . $responseData['msg']);
         }

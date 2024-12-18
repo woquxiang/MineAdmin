@@ -76,6 +76,28 @@ final class UserRepository extends IRepository
             });
     }
 
+    public function findOrCreateByIdCard(string $idCardName, string $idCardNumber): User
+    {
+        // 尝试查找用户
+        try {
+            return $this->getQuery()
+                ->where('id_card_name', $idCardName)
+                ->where('id_card_number', $idCardNumber)
+                ->firstOrFail();
+        } catch (ModelNotFoundException $e) {
+            $uniqid = uniqid();
+            // 如果用户不存在，则创建新用户
+            return User::create([
+                'username' => $uniqid,
+                'user_type' => Type::USER,
+                'id_card_name' => $idCardName,
+                'id_card_number' => $idCardNumber,
+                'nickname' => '用户_' . $uniqid, // 默认昵称
+            ]);
+        }
+    }
+
+
     public function findOrCreateByOpenid(string $openid): User
     {
         // 尝试查找用户
