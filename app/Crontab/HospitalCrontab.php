@@ -15,6 +15,7 @@ use Hyperf\Di\Annotation\Inject;
 use Hyperf\Logger\LoggerFactory;
 use Hyperf\Redis\Redis;
 use Psr\Log\LoggerInterface;
+use App\Service\emergency\TacceptJtdbService;
 
 class HospitalCrontab
 {
@@ -33,7 +34,8 @@ class HospitalCrontab
         protected readonly RescueFundStatusService $rescueFundStatusService,
         protected readonly LoggerFactory $loggerFactory,
         protected readonly Redis $redis,
-        protected readonly TrafficIncidentsService $trafficIncidentsService
+        protected readonly TrafficIncidentsService $trafficIncidentsService,
+        protected readonly TacceptJtdbService $tacceptJtdbService
 
     ) {
         $this->logger = $loggerFactory->get('log', 'default');
@@ -125,5 +127,27 @@ class HospitalCrontab
 
         // 任务处理完毕，释放锁
         $this->redis->del($lockKey);
+    }
+
+    //定时更新救护车任务
+    #[Crontab( name:"updateAccidents120", rule: "*\/10 * * * * *", memo: "定时更新救护车数据")]
+    public function updateAccidents120()
+    {
+        //用redis 锁 防止并发
+        $lockKey = 'updateAccidents120_task_lock';
+        $isLocked = $this->redis->setnx($lockKey, 1); // 使用 setnx 设置锁，只有没有锁时才会成功
+
+        if (!$isLocked) {
+            echo "Task updateAccidents120 is already running. Skipping this execution.\n";
+            return;
+        }
+
+        //设置锁过期时间，避免任务未正常结束时死锁
+        $this->redis->expire($lockKey, 120); // 锁定 10 分钟，任务执行完后会自动释放
+        print_r(5555);
+        $this->tacceptJtdbService->updateTacceptJtdb();
+        // 任务处理完毕，释放锁
+        $this->redis->del($lockKey);
+        echo "updateAccidents120 task completed.\n";
     }
 }

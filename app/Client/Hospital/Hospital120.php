@@ -28,16 +28,19 @@ class Hospital120
         return $this->commonQueryService->queryFromHospital($sql);
     }
 
-    /**
-     * 根据 accid 查询 traffic_medical 表的一条数据 (SQL Server 格式)
-     *
-     * @param string $accid
-     * @return array|string
-     */
-    public function queryMedicalRecordByAccid(string $accid): array|string
+
+    //查询TACCEPT_JtDB 根据 SJBM字段倒叙 查询前500条数据
+    public function queryTacceptJtdb(): array|string
     {
-        // 构造 SQL Server 查询语句
-        $sql = "SELECT TOP 1 * FROM traffic_medical WHERE accid = '{$accid}'";
+        $sql = "SELECT TOP 500 * FROM TACCEPT_JtDB ORDER BY SJBM DESC";
+        return $this->queryFromHospital($sql);
+    }
+    
+
+    //根据SJBM字段查询TACCEPT_JtDB表一条数据返回数组
+    public function queryTacceptJtdbBySjbm(string $sjbm): array|string
+    {
+        $sql = "SELECT TOP 1  * FROM TACCEPT_JtDB WHERE SJBM = '{$sjbm}'";
         $result = $this->queryFromHospital($sql);
 
         if(!empty($result)){
@@ -47,36 +50,4 @@ class Hospital120
         return [];
     }
 
-    /**
-     * 查询 traffic_register 表的记录，可以通过 accid 参数获取单条记录或所有记录
-     *
-     * @param string|null $accid
-     * @return array|string
-     */
-    public function queryAllRegisterRecords(?string $accid = null): array|string
-    {
-        // 如果传入了 accid，则查询单条记录
-        if ($accid) {
-            $sql = "SELECT * FROM traffic_register WHERE accid = '{$accid}'";
-        } else {
-            // 否则查询所有记录
-            $sql = "SELECT * FROM traffic_register ORDER BY accid DESC";
-        }
-
-        return $this->queryFromHospital($sql);
-    }
-
-
-    /**
-     * 根据 accid 查询 traffic_detail 表的所有项目费用单
-     *
-     * @param string $accid
-     * @return array|string
-     */
-    public function queryAllDetailRecordsByAccid(string $accid): array|string
-    {
-        // 构造 SQL Server 查询语句
-        $sql = "SELECT * FROM traffic_detail WHERE accid = '{$accid}'";
-        return $this->queryFromHospital($sql);
-    }
 }

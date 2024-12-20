@@ -41,6 +41,8 @@ import '@/assets/styles/resources/variables.scss'
 import '@/assets/styles/resources/utils.scss'
 import '@/assets/styles/resources/element.scss'
 import '@/assets/styles/resources/yct.scss'
+
+
 // import '@/assets/styles/resources/yct_hide.scss'
 
 async function createI18nService(app: App) {

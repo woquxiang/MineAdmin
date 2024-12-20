@@ -43,7 +43,7 @@ use Hyperf\Swagger\Annotation\HyperfServer;
 use Hyperf\Swagger\Annotation\Post;
 use EasyWeChat\MiniApp\Application;
 use Symfony\Component\Finder\SplFileInfo;
-
+use App\Service\emergency\TacceptJtdbService;
 
 #[HyperfServer(name: 'http')]
 #[Middleware(middleware: TokenMiddleware::class, priority: 100)]
@@ -60,6 +60,7 @@ final class AccidentController extends AbstractController
         protected readonly RegionsService $regionsService,
         protected readonly RescueFundRegionsRepository $rescueFundRegionsRepository,
         protected readonly TrafficIncidentsService $trafficIncidentsService,
+        protected readonly TacceptJtdbService $tacceptJtdbService,
         protected readonly Redis $redis,
     ) {}
 
@@ -165,7 +166,10 @@ final class AccidentController extends AbstractController
     {
         $id = $request->post('id','');
 
-        $ser = $this->trafficIncidentsService->queryAllFromHospital();
+        //$ser = $this->trafficIncidentsService->queryAllFromHospital();
+
+        $ser = $this->tacceptJtdbService->updateTacceptJtdb();
+
 
         //$this->redis->rPush('accident_ids_list', $id);
 

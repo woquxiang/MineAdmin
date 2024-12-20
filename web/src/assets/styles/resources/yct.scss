@@ -1,5 +1,5 @@
 .el-table th.el-table__cell{
-  background-color: #1b3d89;
+  background-color: #1b3d89 !important;
   color: #fff;
   border-right: 1px solid rgba(255, 255, 255, .1);
   border-bottom-color :rgba(255, 255, 255, 0.84);
@@ -173,7 +173,8 @@
 }
 
 .el-table thead.is-group th.el-table__cell{
-  background:#173067 !important;
+  //background:#173067 !important;
+  background:#1b3d89 !important
 }
 .el-table--border th.el-table__cell{
   border-bottom:1px solid #173067;
@@ -260,17 +261,17 @@
 /**
 这里是控制 布局的start
  */
-
-.mine-aside{
-  width: 0;
-  display: none;
-}
-.mine-bars{
-  display: none;
-}
-.mine-main{
-  background-color: #020e2f !important;
-}
+//
+//.mine-aside{
+//  width: 0;
+//  display: none;
+//}
+//.mine-bars{
+//  display: none;
+//}
+//.mine-main{
+//  background-color: #020e2f !important;
+//}
 
 /*
   布局 end

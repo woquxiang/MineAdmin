@@ -13,7 +13,7 @@ import MineProviderPage from '@/layouts/provider.tsx'
 import { onMounted } from 'vue';
 
 onMounted(() => {
-  func()
+  // func()
 });
 
 const func = ()=>{
