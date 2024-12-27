@@ -50,9 +50,14 @@ export default function getTableColumns(dialog: UseDialogExpose, formRef: any, t
                     { label: () => '车牌号码', prop: 'cphm',width:'200px',
                       //用tag组件显示颜色 用 cellrender方法
                       cellRender: ({row}) => {
-                        return (
-                          <ElTag>{row.cphm}</ElTag>
-                        );
+                        //如果cphm为空就返回空字符串，存在就返回el-tag
+                        if (!row.cphm) {
+                          return '';
+                        }else {
+                          return (
+                            <ElTag>{row.cphm}</ElTag>
+                          );
+                        }
                       }
                     },
                     { label: () => '随车电话', prop: 'scdh' ,width:'150px'},

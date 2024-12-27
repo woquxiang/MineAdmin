@@ -191,7 +191,7 @@ class Request
         }
 
         // 获取并返回响应内容
-        return $response->getBody()->getContents();
+        return $response->getBody();
     }
 
 }

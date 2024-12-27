@@ -34,9 +34,12 @@ use App\Service\V1\FrontmachineService;
 use App\Service\V1\J123EventService;
 use App\Service\V1\J123PeopleService;
 use App\Service\XPassportService;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use Hyperf\DbConnection\Db;
 use Hyperf\HttpServer\Annotation\Middleware;
 use Hyperf\HttpServer\Contract\RequestInterface;
+use Hyperf\HttpServer\Contract\ResponseInterface;
 use Hyperf\Redis\Redis;
 use Hyperf\Stringable\Str;
 use Hyperf\Swagger\Annotation\HyperfServer;
@@ -182,8 +185,16 @@ final class AccidentController extends AbstractController
     #[Post(
         path: '/v1/accident/test222',
     )]
-    public function test222(RequestInterface $request)
+    public function test222(RequestInterface $request,ResponseInterface $response)
     {
+        //用 php header函数 重定向到https://baidu.com
+       // return header("Location: https://baidu.com");
+
+        return $response->redirect('https://baidu.com');
+
+
+        return 333;
+
         $id = $request->post('id','');
 
         $serverParams = $request->getServerParams();
@@ -205,5 +216,57 @@ final class AccidentController extends AbstractController
         //$result = $hospitalAService->queryFromHospital($sql);
         return [] ;
 //        return $this->success($result);
+    }
+
+    #[Post(
+        path: '/v1/accident/demox',
+    )]
+    public function demox()
+    {
+        $options = new Options();
+
+
+        print_r(33333);
+
+        $options->set('defaultFont', 'SimSun'); // 设置默认字体（可选）
+        $dompdf = new Dompdf($options);
+
+        $html = '';
+
+        $html .= <<<HTML
+    
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+      <meta charset="UTF-8">
+      <title>发货单</title>
+        <style>
+            body {
+      font-family: SimSun;
+      line-height: 1;
+      font-size: 12px;
+    }
+        </style>
+    </head>
+    <body>
+        <h1>测asdfafd试 PDFaadsfa</h1>
+        <p>这是一个使用 Dompdf 生成的 PDF 示例，包含中文。</p >
+    </body>
+    </html>
+HTML;
+
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+
+        $output = $dompdf->output();
+
+
+
+        if (file_put_contents('f.pdf', $output) === false) {
+            throw new \RuntimeException('无法写入 PDF 文件到指定路径！');
+        }
+
+        return $this->success('PDF 生33成成功！路径：');
     }
 }

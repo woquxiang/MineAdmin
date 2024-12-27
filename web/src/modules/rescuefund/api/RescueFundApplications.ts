@@ -88,9 +88,11 @@ export function view_files(id: number): Promise<ResponseStruct<null>> {
   return useHttp().get(`/admin/rescuefund/rescue_fund_applications/${id}/view_files`)
 }
 
-// 道路基金传文件
+// 道路基金传文件 设置10分钟超时
 export function sync_file(data: RescueFundApplicationsVo): Promise<ResponseStruct<null>> {
-  return useHttp().post('/admin/rescuefund/rescue_fund_applications/sync_file', data)
+  return useHttp().post('/admin/rescuefund/rescue_fund_applications/sync_file', data, {
+    timeout: 10 * 60 * 1000
+  })
 }
 
 // 道路基金申请

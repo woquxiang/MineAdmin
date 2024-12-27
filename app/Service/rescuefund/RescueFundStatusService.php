@@ -2,6 +2,7 @@
 
 namespace App\Service\rescuefund;
 
+use _PHPStan_62c6a0a8b\Nette\Neon\Exception;
 use App\Client\RoadFund\RoadFundApplication;
 use App\Exception\BusinessException;
 use App\Http\Common\ResultCode;
@@ -33,7 +34,7 @@ class RescueFundStatusService extends IService
             $application = $this->rescueFundApplicationsRepository->findById($application_id);
 
             if (!$application) {
-                throw new BusinessException(code: ResultCode::UNPROCESSABLE_ENTITY, message: '未找到指定的 application_id 对应的记录');
+                throw new Exception('未找到指定的 application_id 对应的记录');
             }
 
             $sqxx_id = $application->sqxx_id; // 获取 sqxx_id
@@ -42,12 +43,12 @@ class RescueFundStatusService extends IService
             $data = ['id' => $sqxx_id]; // 创建请求数据
             $response = $this->roadFundApplication->getApplicationById($data); // 调用 API 获取垫付状态信息
 
-            if (!$response || $response['success'] !== true) {
-                throw new BusinessException(code: ResultCode::FAIL, message: '调用第三方 API 查询失败');
+            if (!$response) {
+                throw new Exception('调用第三方 API 查询失败');
             }
 
             if(0 !== $response['code']){
-                throw new BusinessException(code: ResultCode::UNPROCESSABLE_ENTITY,message: $response['msg'] );
+                throw new Exception($response['msg']);
             }else{
                 // 第三步：同步数据到 fund_advance_status 表
                 unset( $response['data']['id']);
@@ -86,8 +87,10 @@ class RescueFundStatusService extends IService
                 $this->createFundAdvanceStatus($data);
             }
         } catch (\Exception $e) {
+            print_r($e->getMessage());
             // 处理异常
-            throw new BusinessException(code: ResultCode::FAIL, message: '同步数据到 fund_advance_status 失败：' . $e->getMessage());
+//            throw new BusinessException(code: ResultCode::FAIL, message: '同步数据到 fund_advance_status 失败：' . $e->getMessage());
+            throw new \Exception('同步数据到 fund_advance_status 失败：' . $e->getMessage());
         }
     }
 

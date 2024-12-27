@@ -14,7 +14,7 @@
 
     <template v-if="Object.keys(groupedFiles).length > 0">
       <div v-for="(group, categoryId) in groupedFiles" :key="categoryId" class="space-y-6">
-        <h6 class="text-2xl">{{getDictLabel('rescue-fund-file_type',categoryId)}}</h6>
+        <h6 class="text-2xl text-white">{{getDictLabel('rescue-fund-file_type',categoryId)}}</h6>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
 
@@ -141,7 +141,7 @@
         <embed :src="previewFile.local_url" width="100%" height="500px" type="application/pdf" />
       </div>
       <div v-else>
-        <img :src="previewFile.local_url" alt="file preview" class="rounded-lg shadow-md" />
+        <img :src="previewFile.local_url" alt="file preview" class="rounded-lg shadow-md w-full" />
       </div>
     </el-dialog>
   </div>

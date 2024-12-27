@@ -41,7 +41,7 @@ class HospitalCrontab
         $this->logger = $loggerFactory->get('log', 'default');
     }
 
-    #[Crontab( name:"updateAccidentsA", rule: "*\/30 * * * * *", memo: "同步患者数据")]
+//    #[Crontab( name:"updateAccidentsA", rule: "*\/30 * * * * *", memo: "同步患者数据")]
     public function updateAccidentsA()
     {
         // 从 Redis 中取出一个案件 ID
@@ -75,13 +75,13 @@ class HospitalCrontab
         }
     }
 
-    #[Crontab( name:"CreateOrUdpateAccidentsMain", rule: "*/5 * * * *", memo: "同步主体数据")]
+//    #[Crontab( name:"CreateOrUdpateAccidentsMain", rule: "*/5 * * * *", memo: "同步主体数据")]
     public function CreateOrUdpateAccidentsMain()
     {
         $this->trafficIncidentsService->queryAllFromHospital();
     }
 
-    #[Crontab( name:"updateAccidentsB", rule: "*\/1 * * * * *", memo: "即时更新患者数据")]
+//    #[Crontab( name:"updateAccidentsB", rule: "*\/1 * * * * *", memo: "即时更新患者数据")]
     public function updateAccidentsB()
     {
         // 锁定 key 防止并发执行
@@ -130,7 +130,7 @@ class HospitalCrontab
     }
 
     //定时更新救护车任务
-    #[Crontab( name:"updateAccidents120", rule: "*\/10 * * * * *", memo: "定时更新救护车数据")]
+//    #[Crontab( name:"updateAccidents120", rule: "*\/10 * * * * *", memo: "定时更新救护车数据")]
     public function updateAccidents120()
     {
         //用redis 锁 防止并发

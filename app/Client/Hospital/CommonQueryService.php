@@ -29,7 +29,7 @@ class CommonQueryService
             } else {
                 // 开发环境逻辑
                 $options = [
-                    'json' => ['sql' => $sql],
+                    'json' => ['sql' => $sql ,'type'=>2],
                     //模拟的
                     'headers'=>[
                         'Authorization'=>'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MzM3Mjk5MjksIm5iZiI6MTczMzcyOTkyOSwiZXhwIjoxNzMzNzMzNTI5LCJqdGkiOiIxIn0.U7Ttt-9JLHIlL3l0mm8LR32YkyyJE7Ry9mBAb1WhXUk'

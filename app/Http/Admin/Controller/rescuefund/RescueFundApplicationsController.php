@@ -106,18 +106,16 @@ class RescueFundApplicationsController extends AbstractController
     #[Permission(code: 'rescuefund:rescue_fund_applications:detail')]
     public function details(int $id,RequestInterface $request): Result
     {
-        print_r('环境' . env('APP_ENV'));
-
-
         $result = $this->service->findById($id);
         if(!$result){
             throw new BusinessException(ResultCode::UNPROCESSABLE_ENTITY, '没有找到记录');
         }
 
-        //$result1 = $this->roadFundApplication->getApplicationById(['id'=>$result['sqxx_id']]);
-        if($result['sqxx_id']){
-            $this->rescueFundStatusService->syncDataByApplicationId($result->id);
-        }
+        $result1 = $this->roadFundApplication->getApplicationById(['id'=>$result['sqxx_id']]);
+       if($result['sqxx_id']){
+           $this->roadFundApplication->deleteToken();
+           $this->rescueFundStatusService->syncDataByApplicationId($result->id);
+       }
 
         return $this->success(array_merge($result->toArray(),$this->regionsService->getRegionNamesByFundId($id)));
     }

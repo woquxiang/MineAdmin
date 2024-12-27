@@ -11,39 +11,19 @@ class RoadFundApplication extends Request
     {
         $this->type = 'POST';
         $this->path = '/dljz/thirdSqxx/commitSqxx'; // 第三方接口路径
-        $this->data = array_merge($this->data, $data); // 合并请求数据
+//        $this->data = array_merge($this->data, $data); // 合并请求数据
+        $this->data = $data; // 合并请求数据
 
         return $this->exec(); // 执行请求
     }
 
-    /***
-     * @param array $data
-     * @return mixed
-     *  Array
-    (
-    [code] => 0
-    [msg] => 成功
-    [data] => Array
-    (
-    [id] => 1860878202602377217
-    [approveUserName] => 10029968
-    [giveMoneyTime] =>
-    [applyFeeType] => 2010001
-    [adjustmentMoney] =>
-    [wechatSqxxState] => 2067001
-    [wechatApproveState] => 2068001
-    [returnReason] =>
-    [fileList] =>
-    )
-    [success] => 1
-    )
-     */
     // 通过ID查询第三方申请信息
     public function getApplicationById(array $data)
     {
         $this->type = 'POST';
         $this->path = '/dljz/thirdSqxx/querySqxxById'; // 查询接口路径
-        $this->data = array_merge($this->data, $data); // 合并请求数据
+//        $this->data = array_merge($this->data, $data); // 合并请求数据
+        $this->data = $data; // 合并请求数据
 
         return $this->exec(); // 执行请求并返回结果
     }
@@ -53,7 +33,8 @@ class RoadFundApplication extends Request
     {
         $this->type = 'POST';
         $this->path = '/dljz/thirdSqxx/updateSqxx'; // 编辑接口路径
-        $this->data = array_merge($this->data, $data); // 合并请求数据
+//        $this->data = array_merge($this->data, $data); // 合并请求数据
+        $this->data = $data; // 合并请求数据
 
         return $this->exec(); // 执行请求并返回结果
     }
@@ -91,9 +72,15 @@ class RoadFundApplication extends Request
     // 执行请求
     protected function exec()
     {
-        $response = $this->sendRequest($this->data);
-        $this->data = [];
+        $response =  $this->sendRequest($this->data)->getContents();
 
+        $this->data = [];
         return json_decode($response, true);
+    }
+
+    //删除 token
+    public function deleteToken()
+    {
+        $this->token = null;
     }
 }
