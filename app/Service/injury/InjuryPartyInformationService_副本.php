@@ -110,15 +110,6 @@ class InjuryPartyInformationService extends IService
         // 获取二维码的Base64编码
         //$dataUri = $result->getDataUri();
 
-        $signatureListStr = '';
-        foreach($signatureList as $item){
-            $signatureListStr .= '<img src="'.$item['signature_data'].'"  style="width: 100px;height: 30px;">';
-        }
-
-        //年 月 日
-        $year = date('Y');
-        $month = date('m');
-        $day = date('d');
 
     
         $html .= <<<HTML
@@ -146,8 +137,8 @@ class InjuryPartyInformationService extends IService
                 }
                 .p1 p {
                     word-break: break-word;
-                    padding:2px 0;
-                    line-height: 1.1;
+                    padding:5px 0;
+                    line-height: 1.2;
                 }
                 .stamp {
                     position: relative;
@@ -170,9 +161,6 @@ class InjuryPartyInformationService extends IService
                 .yearMonthDay span {
                     padding: 0 20px;
                 }
-                .word-break {
-                    word-break: break-word;
-                }
             </style>
         </head>
         <body>
@@ -180,19 +168,21 @@ class InjuryPartyInformationService extends IService
         
                 <!-- 第一部分：直赔须知标题和内容合并为一个单元格 -->
                 <tr >
-                    <td colspan="2" style="padding-bottom: 10px;">
+                    <td colspan="2" style="padding-bottom: 60px;">
                         <h2 style="text-align: center; font-weight: bold;padding: 10px 0;">
                             直赔须知
                         </h2>
         
                         <div class="p1">
-                            <p>{$emptySpace}1、申请条件:交通事故当事人选择道路交通事故人伤绿色通道医疗救助投治直服务必项是机动车交通事故造成人员受伤的，符合法律规定及保险合同约定，且无核定约定的免责事项或符合江苏省道路交通事故社会校助基金垫付条件的。                            </p>
-                            <p>{$emptySpace}2、申请人可以是道路交道事故伤者或伤者近亲属(莺授权委托)、侵权人或被保人。</p>
-                            <p>{$emptySpace}3、申请人可以通过人伤绿色通道医疗教助教治直赔服务中心、公安交管部门、保险人。险公司人伤直赔服务窗口、道路救助基金受理网点选择人伤绿色通道医疗救治直赔服务或中请送路数助基金垫付医疗费用。</p>
-                            <p>{$emptySpace}4、道酪交通事故人伤绿色通道医疗教治直路所需材料，网念由道路交通事故人伤珠色通道医疗报治直赔服务中心及相关保险公司工作人员代为收取。</p>
-                            <p>{$emptySpace}5、已有事故责任认定书的，保险公司按照事故责任比例，对国家基本医疗保险标准范围内的合理的医疗费直赔医疗机构;对未确定事效责任比例的，保险公司按照公安交管部门出具的初步责任意见书最低责任比例，对国家基本医疗保险标准范围内的合理的医疗费直赔医疗机构;出院前已确定事故认定书的，对未站清的，合理的国家基本医疗保险标准范围内的合理的医疗费可再次中请直脑，保险公司将对按照事故责任此例直赔医疗机构。                            </p>
-                            <p>{$emptySpace}6、对于国家基本医疗保险标准范围外的医疗费用由事故当事各方按照相关法律规定，自行协商承机，并不得通过任何途径向保险公司主张。</p>
-                            <p>{$emptySpace}7、出院前己有事放认定书的，可以直接到一楼人伤绿色通道医疗教助救治直赔服务中心进行调解。对于直陪调解的，应该由伤者承担的医疗费用，伤者无力承担的，承诺间意以说工举费用支付医疗费，保险公司骑直接在赔款中扣减支付医疗机构，一次性课解结案:应当由机动车驾驶人承担的医疗费用，如果驾驶人向公安交管部门缴销事放预导获，由公安交管部门直接支村给医疗机构。</p>
+                            <p>
+                                {$emptySpace}1、申请条件：交通事故当事人选择道路事故人伤绿色通道医疗救助救治直赔服务必须市机动车交通事故造成人员受伤的，符合法律规定及保险合同约定，且无核定约定的免责事项或符合江苏省道路交通事故社会救助基金垫付条件的。
+                            </p>
+                            <p>{$emptySpace}2、申请人可以是通过交通事故伤者本人或者监护人（需提供委托书），使权人或被保险人。</p>
+                            <p>{$emptySpace}3、申请人可以通过人伤绿色通道医疗救助服务中心、公安交管部门、保险公司人伤直赔服务窗口、道路救助基金委员会等相关机构办理绿色通道医疗救治直赔服务。</p>
+                            <p>{$emptySpace}4、通过交通事故人伤绿色通道医疗救治直赔所需材料，可通过道路交通事故人伤绿色通道医疗救治直赔服务中心工作人员代为收取。</p>
+                            <p>{$emptySpace}5、保险公司按照事故责任比例，中国家基本医疗保险标准范围内的合理的医疗费用赔偿医疗机构；对未纳入基本医疗保险标准范围内的医疗费用，保险公司将根据中国家基本医疗保险标准范围内的合理的医疗费用标准进行审核，对未经清的、合理的但不在基本医疗保险标准范围内的合理的医疗费用再次申请直赔，保险公司将对按照事故责任比例的直赔标准进行赔付。</p>
+                            <p>{$emptySpace}6、对于中国家基本医疗保险标准范围外的医疗费用由事故各方按照相关法律规定，自行协商承担，并不得通过任何渠道向保险公司主张。</p>
+                            <p>{$emptySpace}7、对于通过绿色通道医疗救助救治直赔服务中心进行直赔，对于直赔清单内，经医疗费用审核后，如有未通过审核的医疗费用，伤者无力承担的，本由医疗机构承担的医疗费用，如医疗机构同意，可由公安交管部门与医疗机构协商后，由公安交管部门垫付医疗费用。</p>
                         </div>
                     </td>
                 </tr>
@@ -200,20 +190,19 @@ class InjuryPartyInformationService extends IService
                 <!-- 第二部分：本人已知晓（合并为一个单元格） -->
                 <tr>
                     <td colspan="2" style="padding-left: 10px;">
-                         <p class="bold word-break">本人已阅读知晓《道路交通事故人伤绿色通道医疗救助救治直赔申请书》内容，并自愿申请。</p>
+                         <p class="bold">本人已知晓《道路交通事故人伤绿色通道医疗救助救治直赔申请书》内容，并自愿申请。</p>
                         <div style="margin-top: 50px;padding-bottom: 20px;">
-                        <table style="width: 100%; border: none;">
-                        <tr>
-                            <td style="width: 50%; border: none;position: relative;left: 100px;padding-left: 30px;margin:30px 0;padding-bottom: 20px;">
-                                <p>被保险人签字（公章）</p>
-                            </td>
-                            <td style="width: 50%; border: none;margin-right: 60px;">
-                               <span style="margin-bottom: 20px;">申请人签字：</span>
-                               {$signatureListStr}
-                               <p style="margin-top: 30px;" class="yearMonthDay">日期： {$year}年 {$month}月 {$day}日</p>
-                               </td>
-                        </tr>
-                    </table>
+                            <table style="width: 100%; border: none;">
+                                <tr>
+                                    <td style="width: 50%; border: none;position: relative;left: 100px;padding-left: 30px;margin:30px 0;padding-bottom: 20px;">
+                                        <p>被保险人签字（公章）</p>
+                                    </td>
+                                    <td style="width: 50%; border: none;margin-right: 60px;">
+                                       <p style="margin-bottom: 20px;">申请人签字：</p>
+                                       <p class="yearMonthDay">日期： <span>年 </span><span>月 </span><span>日</span></p>
+                                       </td>
+                                </tr>
+                            </table>
                         </div>
                     </td>
                 </tr>
@@ -221,9 +210,9 @@ class InjuryPartyInformationService extends IService
                     <td colspan="2" style="height: 200px; position: relative;">
                         <div style="position: absolute; top: 10px; left: 10px;">
                             <p style="padding-bottom: 30px;" class="bold">直赔服务中心意见</p>
-                            <p>□120交接单 □事故认定书 □因交通事故扣留机动车及非机动车（机动车）强制措施凭证</p>
-                            <p>□公安交管部门初步责任意见书 □公安交管部门第三方赔付通知书</p>
-                            <p>□已电话通知 __________ 公司 __________ 工作人员</p>
+                            <p>□门诊收据 □事故认定书 □司法文书和事故认和事故认定责任判决和事故认定责任判决定责任判决书（执法文书）强制</p>
+                            <p>□公安交管部门伤者具体病历 □公安交管部门第三方赔付通知书</p>
+                            <p>□其他证明 _______ 公司 _______ 工作人员</p>
                         </div>
                         <div style="position: absolute; bottom: 10px; right:100px;">
                             <p style="margin-bottom: 30px;">经办人：</p>

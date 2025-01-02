@@ -62,3 +62,10 @@ export function save(id: number, data: InjuryPartyInformationVo): Promise<Respon
 export function deleteByIds(ids: number[]): Promise<ResponseStruct<null>> {
   return useHttp().delete('/admin/injury/injury_party_information', { data: ids })
 }
+
+// 通过直赔ID合成签名PDF
+export function mergeSignature(id: string): Promise<ResponseStruct<null>> {
+  return useHttp().post('/admin/injury/injury_party_information/merge_signature', { id }, {
+    timeout: 1000000
+  })
+}

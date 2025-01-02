@@ -30,24 +30,30 @@ class InjurySignatureService extends IService
         }
 
         $data['application_id'] = $injuryParty['application_id'];   
-        $data['name'] = $injuryParty['name'];
+        //$data['name'] = $injuryParty['name'];
 
         //判断签名是否是base64数据
-        if(base64_encode(base64_decode($data['signature_data'], true)) === $data['signature_data']){
-            $data['signature_data'] = base64_encode($data['signature_data']);
-        }else{
-            throw new BusinessException(ResultCode::UNPROCESSABLE_ENTITY, '签名格式错误');
-        }
 
+        // if(base64_encode(base64_decode($data['signature_data'], true)) === $data['signature_data']){
+        //     $data['signature_data'] = base64_encode($data['signature_data']);
+        // }else{
+        //     throw new BusinessException(ResultCode::UNPROCESSABLE_ENTITY, '签名格式错误');
+        // }
+
+        $this->repository->create($data);
+
+        /***
+        //如果存在，则更新数据
         //判断直赔ID和姓名是否存在
         $signature = $this->repository->findByDirectCompensationIdAndName($data['direct_compensation_id'],$data['name']);
-        //如果存在，则更新数据
+      
         if($signature){
             $data['id'] = $signature['id'];
             $this->repository->updateById($data['id'],$data);
         }else{
             $this->repository->create($data);
         }
+         */
 
         return true;
         //用内置的创建或者修改的方法

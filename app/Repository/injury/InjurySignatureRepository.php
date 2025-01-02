@@ -25,6 +25,12 @@ class InjurySignatureRepository extends IRepository
         return $this->getQuery()->where('direct_compensation_id', $directCompensationId)->where('name', $name)->first();
     }
 
+    //根据直赔ID查询
+    public function findByDirectCompensationId(string $directCompensationId): ?array
+    {
+        return $this->getQuery()->where('direct_compensation_id', $directCompensationId)->get()->toArray();
+    }
+
     public function handleSearch(Builder $query, array $params): Builder
     {
                                                         

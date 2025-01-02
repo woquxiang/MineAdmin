@@ -73,15 +73,13 @@ class InjuryClaimApplicationService extends IService
         $result =  $this->repository->getInjuryClaimApplicationByIdWithParty($id);
         //循环当事人信息获取附件
         foreach($result->party_information as $party){
-            $object_name = $party->direct_compensation_id.'.pdf';
+            $object_name = $party->direct_compensation_id.'_notice.pdf';
             $attachment = $this->attachmentRepository->getAttachmentByObjectName($object_name);
             $party->attachment = $attachment;
         }
 
         return $result;
     }
-
-    //
 
     //更新
     public function updateById(mixed $id, array $data):mixed
@@ -110,7 +108,7 @@ class InjuryClaimApplicationService extends IService
                     unset($party['direct_compensation_id']);
                     $this->partyRepository->updateById($party['id'], $party);
                     //删除附件
-                    $this->attachmentRepository->deleteByObjectName($partyInfo['direct_compensation_id'].'.pdf');
+                    $this->attachmentRepository->deleteByObjectName($partyInfo['direct_compensation_id'].'_notice.pdf');
                     $updatedPartyIds[] = $party['id'];
                 } else {
                     // 没有ID，创建新记录
@@ -332,7 +330,7 @@ HTML;
     
             //保存pdf
             $output = $dompdf->output();
-            $filename = $person['direct_compensation_id'].'.pdf';
+            $filename = $person['direct_compensation_id'].'_notice.pdf';
 
             //保存到指定目录 放到 stroage/uploads/{日期}/direct_compensation/
             $path = BASE_PATH.'/storage/export/'.date('Y-m-d').'/direct_compensation/';

@@ -495,28 +495,35 @@ const mergeSignatures = async () => {
                     <el-form-item label="是否是伤者" prop="is_injured">
                       <el-switch v-model="dynamicModels[index].is_injured" active-text="是" inactive-text="否" :active-value="1" :inactive-value="0" />
                     </el-form-item>
+
+
+
                   </div>
+            
                 </div>
 
 
               <!-- 如果是伤者 -->
               <div v-if="dynamicModels[index].is_injured == 1">
 
-                <!-- 直赔文书 -->
-                <div class="flex">
-                  <div class="w-1/2">
-                    <el-form-item label="直赔通知书">
-                      <el-button type="primary" @click="downloadAttachment(dynamicModels[index].attachment?.url)" :disabled="!dynamicModels[index].attachment">
-                        {{ dynamicModels[index].attachment ? '直赔通知书' : '正在生成中...' }}
-                      </el-button>
-                    </el-form-item>
-                  </div>
-                  <div class="w-1/2">
-                    <el-form-item label="直赔申请书">
-                      <el-button type="primary" @click="generateSignature(index)">直赔申请书</el-button>
-                    </el-form-item>
-                  </div>
+                <!-- 附件 -->
+                <div v-if="dynamicModels[index].attachment != null">
+                  <el-form-item label="直赔通知书" >
+                    <el-button type="primary" @click="downloadAttachment(dynamicModels[index].attachment.url)">直赔通知书</el-button>
+                  </el-form-item>
                 </div>
+                <!-- 没有附件 -->
+                <div v-else>
+                  <el-form-item label="直赔通知书">
+                    <el-button type="primary" disabled>正在生成中...</el-button>
+                  </el-form-item>
+                </div>
+
+                <!-- 直赔申请书 -->
+                <el-form-item label="直赔申请书">
+                  <el-button type="primary" @click="generateSignature(index)">直赔申请书</el-button>
+                </el-form-item>
+          
 
                 <!-- 住院信息 -->
                <div class="text-lg font-bold text-white py-3 text-center">住院信息</div>

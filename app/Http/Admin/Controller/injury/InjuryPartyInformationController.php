@@ -101,4 +101,21 @@ class InjuryPartyInformationController extends AbstractController
         return $this->success();
     }
 
+    //通过直赔ID合成签名PDF
+    #[Post(
+        path: '/admin/injury/injury_party_information/merge_signature',
+        // operationId: 'injury:injury_party_information:merge_signature',
+        summary: '签名合成',
+        security: [['Bearer' => [], 'ApiKey' => []]],
+        tags: ['人伤当事人'],
+    )]
+    public function mergeSignature(): Result
+    {
+        $id = $this->getRequestData()['id'];
+
+        $url = $this->service->mergeSignature($id);
+        return $this->success([
+            'url' => $url
+        ]);
+    }
 }
