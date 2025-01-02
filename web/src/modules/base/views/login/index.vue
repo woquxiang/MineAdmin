@@ -21,7 +21,7 @@ import CarPng from '@/assets/images/img.png'
 </script>
 
 <template>
-  <div  v-show="false" class="h-full min-w-[380px] w-full flex items-center justify-center overflow-hidden border-1 bg-blue-950 lg:justify-between lg:bg-white">
+  <div  v-show="true" class="h-full min-w-[380px] w-full flex items-center justify-center overflow-hidden border-1 bg-blue-950 lg:justify-between lg:bg-white">
     <div class="relative hidden h-full w-10/12 md:hidden lg:flex">
       <div class="gradient-rainbow"
            :style="{

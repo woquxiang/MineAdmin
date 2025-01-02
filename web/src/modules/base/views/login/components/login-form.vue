@@ -14,8 +14,8 @@ import useUserStore from '@/store/modules/useUserStore.ts'
 import useSettingStore from '@/store/modules/useSettingStore.ts'
 
 const { t } = useI18n()
-// const isProduction: boolean = import.meta.env.MODE === 'production'
-const isProduction = false
+const isProduction: boolean = import.meta.env.MODE === 'production'
+// const isProduction = false
 const userStore = useUserStore()
 const settingStore = useSettingStore()
 const router = useRouter()
@@ -28,7 +28,8 @@ const form = reactive<{
   code: string
 }>({
   username: isProduction ? '' : 'admin',
-  password: isProduction ? '' : '123456',
+  // password: isProduction ? '' : '123456',
+  password: isProduction ? '' : '{Yct10.13@ycjj',
   code: isProduction ? '' : '1234',
 })
 
@@ -84,7 +85,7 @@ async function submit() {
 
 // 自动触发登录
 onMounted(() => {
-  submit()
+  // submit()
 })
 </script>
 
