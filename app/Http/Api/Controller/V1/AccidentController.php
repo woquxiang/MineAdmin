@@ -250,7 +250,9 @@ final class AccidentController extends AbstractController
     </head>
     <body>
         <h1>测asdfafd试 PDFaadsfa</h1>
+        <h1 style="color: red;font-weight: 500;">测asdfafd试 PDFaadsfa</h1>
         <p>这是一个使用 Dompdf 生成的 PDF 示例，包含中文。</p >
+        <p style="font-weight: 903330;">这是一个使用 Dompdf 生成的 PDF 示例，包含中文。</p >
     </body>
     </html>
 HTML;
@@ -263,7 +265,7 @@ HTML;
 
 
 
-        if (file_put_contents('f.pdf', $output) === false) {
+        if (file_put_contents('fddxxxxd.pdf', $output) === false) {
             throw new \RuntimeException('无法写入 PDF 文件到指定路径！');
         }
 

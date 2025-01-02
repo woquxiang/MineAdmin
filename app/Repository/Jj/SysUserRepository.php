@@ -19,6 +19,18 @@ class SysUserRepository extends IRepository
         return $this->getQuery()->where('dept_id', $deptId)->get()->toArray();
     }
 
+    //根据 user_id 获取用户数据或者抛出异常 直接用内置的方法
+    public function getUserByUserId($userId): Model
+    {
+        return $this->getQuery()->where('user_id', $userId)->firstOrFail();
+    }
+
+    //根据nick_name 获取用户数据
+    public function getUserByNickName($nickName): ?Model
+    {
+        return $this->getQuery()->where('nick_name', $nickName)->first();
+    }
+
     public function handleSearch(Builder $query, array $params): Builder
     {
 

@@ -46,6 +46,18 @@ final class AttachmentRepository extends IRepository
             ->first();
     }
 
+    //根据object_name 删除附件表数据
+    public function deleteByObjectName(string $object_name)
+    {
+        return $this->model->newQuery()->where('object_name', $object_name)->delete();
+    }
+
+    //根据object_name 获取附件表数据
+    public function getAttachmentByObjectName(string $object_name)
+    {
+        return $this->model->newQuery()->where('object_name', $object_name)->first();
+    }
+
     public function handleSearch(Builder $query, array $params): Builder
     {
         return $query

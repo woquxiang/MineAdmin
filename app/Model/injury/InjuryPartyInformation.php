@@ -42,9 +42,15 @@ class InjuryPartyInformation extends MineModel
     protected ?string $table = 'injury_party_information';
 
     protected array $fillable = ['id','application_id','name','phone','gender','id_number','address','transportation_method','vehicle_owner','license_plate','vehicle_owner_address','insured_person','insurance_company','insurance_type','insurance_amount','created_at','updated_at','created_by','updated_by','deleted_at','ward_number','bed_number','injury_diagnosis','total_medical_expenses_insurance','total_medical_expenses_self_pay','hospitalization_number','hospitalization_department','discharge_status','total_medical_expenses_road_fund','is_injured',
-    'hospital_id'
+    'hospital_id','direct_compensation_id'
 
 ];
 
-    protected array $casts = ['id' => 'int','application_id' => 'int','name' => 'string','phone' => 'string','gender' => 'string','id_number' => 'string','address' => 'string','transportation_method' => 'string','vehicle_owner' => 'string','license_plate' => 'string','vehicle_owner_address' => 'string','insured_person' => 'string','insurance_company' => 'string','insurance_type' => 'string','insurance_amount' => 'string','created_at' => 'string','updated_at' => 'string','created_by' => 'string','updated_by' => 'string','deleted_at' => 'string','ward_number' => 'string','bed_number' => 'string','injury_diagnosis' => 'string','total_medical_expenses_insurance' => 'string','total_medical_expenses_self_pay' => 'string','hospitalization_number' => 'string','hospitalization_department' => 'string','discharge_status' => 'string','total_medical_expenses_road_fund' => 'string','is_injured' => 'int','hospital_id' => 'int'];
+    protected array $casts = ['id' => 'int','application_id' => 'int','name' => 'string','phone' => 'string','gender' => 'string','id_number' => 'string','address' => 'string','transportation_method' => 'string','vehicle_owner' => 'string','license_plate' => 'string','vehicle_owner_address' => 'string','insured_person' => 'string','insurance_company' => 'string','insurance_type' => 'string','insurance_amount' => 'string','created_at' => 'string','updated_at' => 'string','created_by' => 'string','updated_by' => 'string','deleted_at' => 'string','ward_number' => 'string','bed_number' => 'string','injury_diagnosis' => 'string','total_medical_expenses_insurance' => 'string','total_medical_expenses_self_pay' => 'string','hospitalization_number' => 'string','hospitalization_department' => 'string','discharge_status' => 'string','total_medical_expenses_road_fund' => 'string','is_injured' => 'int','hospital_id' => 'int','direct_compensation_id' => 'string'];
+
+    //关联查询人伤直赔记录
+    public function application()
+    {
+        return $this->belongsTo(InjuryClaimApplication::class, 'application_id', 'id');
+    }
 }

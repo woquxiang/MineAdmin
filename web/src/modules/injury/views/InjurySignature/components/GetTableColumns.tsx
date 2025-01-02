@@ -8,21 +8,19 @@
  * @Link   https://github.com/mineadmin
  */
 import type { MaProTableColumns, MaProTableExpose } from '@mineadmin/pro-table'
-import type { InjuryClaimApplicationVo } from '~/injury/api/InjuryClaimApplication.ts'
+import type { InjurySignatureVo } from '~/injury/api/InjurySignature.ts'
 import type { UseDialogExpose } from '@/hooks/useDialog.ts'
 
 import { useMessage } from '@/hooks/useMessage.ts'
-import { deleteByIds } from '~/injury/api/InjuryClaimApplication.ts'
+import { deleteByIds } from '~/injury/api/InjurySignature.ts'
 import { ResultCode } from '@/utils/ResultCode.ts'
 import hasAuth from '@/utils/permission/hasAuth.ts'
-import { useRouter } from 'vue-router'
 
 export default function getTableColumns(dialog: UseDialogExpose, formRef: any, t: any): MaProTableColumns[] {
   const dictStore = useDictStore()
   const msg = useMessage()
-  const router = useRouter()
 
-  const showBtn = (auth: string | string[], row: InjuryClaimApplicationVo) => {
+  const showBtn = (auth: string | string[], row: InjurySignatureVo) => {
     return hasAuth(auth)
   }
 
@@ -32,16 +30,16 @@ export default function getTableColumns(dialog: UseDialogExpose, formRef: any, t
     // 索引序号列
     { type: 'index' },
     // 普通列
-                        { label: () => '直赔编号', prop: 'claim_code' ,width: '170px'},
-                        { label: () => '案件编号', prop: 'case_code' },
-                    { label: () => '报警电话', prop: 'emergency_phone' },
-                    { label: () => '事故时间', prop: 'accident_time' },
-                    { label: () => '天气情况', prop: 'weather_condition' },
-                    { label: () => '事故地点', prop: 'accident_location' },
-                    { label: () => '事故描述', prop: 'accident_description' },
-                    { label: () => '申请时间', prop: 'application_date', width: '170px' },
-
-
+                        { label: () => '赔偿申请ID', prop: 'application_id' },
+                    { label: () => '直赔ID', prop: 'direct_compensation_id' },
+                    { label: () => '姓名', prop: 'name' },
+                    { label: () => '签名数据（Base64编码）', prop: 'signature_data' },
+                    { label: () => '创建时间', prop: 'created_at' },
+                    { label: () => '更新时间', prop: 'updated_at' },
+                    { label: () => '创建者', prop: 'created_by' },
+                    { label: () => '更新者', prop: 'updated_by' },
+                    { label: () => '删除时间', prop: 'deleted_at' },
+          
     // 操作列
     {
       type: 'operation',
@@ -53,18 +51,16 @@ export default function getTableColumns(dialog: UseDialogExpose, formRef: any, t
           {
             name: 'edit',
             icon: 'i-heroicons:pencil',
-            show: ({ row }) => showBtn('injury:injury_claim_application:update', row),
+            show: ({ row }) => showBtn('injury:injury_signature:update', row),
             text: () => t('crud.edit'),
             onClick: ({ row }) => {
-              // 跳转到编辑页面 跳转到编辑页面 /injury/save/:id 用params传id
-              router.push({
-                path: '/injury/save/' + row.id,
-              })
+              dialog.setTitle(t('crud.edit'))
+              dialog.open({ formType: 'edit', data: row })
             },
           },
           {
             name: 'del',
-            show: ({ row }) => showBtn('injury:injury_claim_application:delete', row),
+            show: ({ row }) => showBtn('injury:injury_signature:delete', row),
             icon: 'i-heroicons:trash',
             text: () => t('crud.delete'),
             onClick: ({ row }, proxy: MaProTableExpose) => {

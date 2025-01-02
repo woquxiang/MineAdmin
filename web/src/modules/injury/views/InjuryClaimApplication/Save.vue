@@ -6,6 +6,8 @@ import { create, details,save } from "~/injury/api/InjuryClaimApplication"
 import { useRouter } from 'vue-router'
 import dayjs from 'dayjs' // 如果项目中使用了 dayjs
 import { getHospitalList } from "~/injury/api/InjuryClaimApplication"
+import { saveAs } from 'file-saver'
+import axios from 'axios'
 
 
 const msg = useMessage()
@@ -103,7 +105,9 @@ const partyRules = {
   ],
   id_number: [{ required: true, message: '请输入身份证号', trigger: 'blur' }],
   address: [{ required: true, message: '请输入住址', trigger: 'blur' }],
-  transportation_method: [{ required: true, message: '请输入交通方式', trigger: 'blur' }]
+  transportation_method: [{ required: true, message: '请输入交通方式', trigger: 'blur' }],
+  //就诊医院
+  hospital_id: [{ required: true, message: '请选择就诊医院', trigger: 'change' }],
 }
 
 // 基本信息表单验证规则
@@ -234,6 +238,29 @@ const goBack = () => {
   router.push({
     path: '/injury/InjuryClaimApplication',
   })
+}
+
+// 下载直赔通知书
+const downloadAttachment = async (url: string) => {
+  try {
+    if (!url) {
+      msg.error('文件路径无效');
+      return
+    }
+
+    const response = await axios.get(url, {
+      responseType: 'blob',
+    });
+
+    // 文件名 改随时间
+    const fileName = `直赔通知书_${dayjs().format('YYYY-MM-DD_HH-mm-ss')}.pdf`
+    saveAs(response.data, fileName); // 使用 file-saver 的 saveAs 方法
+  } catch (error) {
+    console.error('下载失败:', error)
+    msg.error('下载失败，请稍后再试');
+    // 下载失败就用浏览器打开
+    window.open(url, '_blank')
+  }
 }
 
 </script>
@@ -374,6 +401,9 @@ const goBack = () => {
                     <el-form-item label="是否是伤者" prop="is_injured">
                       <el-switch v-model="dynamicModels[index].is_injured" active-text="是" inactive-text="否" :active-value="1" :inactive-value="0" />
                     </el-form-item>
+
+
+
                   </div>
             
                 </div>
@@ -382,10 +412,23 @@ const goBack = () => {
               <!-- 如果是伤者 -->
               <div v-if="dynamicModels[index].is_injured == 1">
 
-                <el-form-item label="直赔通知书" class="mb-0">
-                <el-button type="primary">直赔通知书</el-button>
-                </el-form-item>
+                <!-- 附件 -->
+                <div v-if="dynamicModels[index].attachment != null">
+                  <el-form-item label="直赔通知书" >
+                    <el-button type="primary" @click="downloadAttachment(dynamicModels[index].attachment.url)">直赔通知书</el-button>
+                  </el-form-item>
+                </div>
+                <!-- 没有附件 -->
+                <div v-else>
+                  <el-form-item label="直赔通知书">
+                    <el-button type="primary" disabled>正在生成中...</el-button>
+                  </el-form-item>
+                </div>
 
+                <!-- 直赔申请书 -->
+                <el-form-item label="直赔申请书">
+                  <el-button type="primary" @click="generateSignature(index)">直赔申请书</el-button>
+                </el-form-item>
 
                 <!-- 住院信息 -->
                <div class="text-lg font-bold text-white py-3 text-center">住院信息</div>

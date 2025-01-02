@@ -2,7 +2,6 @@
 
 namespace App\Service\rescuefund;
 
-use _PHPStan_62c6a0a8b\Nette\Neon\Exception;
 use App\Client\RoadFund\RoadFundApplication;
 use App\Exception\BusinessException;
 use App\Http\Common\ResultCode;
@@ -11,6 +10,7 @@ use App\Repository\rescuefund\RescueFundApplicationsRepository;
 use App\Service\IService;
 use App\Repository\rescuefund\RescueFundStatusRepository as Repository;
 use App\Model\rescuefund\RescueFundStatus; // 引入模型类
+use Exception;
 
 class RescueFundStatusService extends IService
 {
@@ -86,7 +86,7 @@ class RescueFundStatusService extends IService
                 // 如果记录不存在，进行创建
                 $this->createFundAdvanceStatus($data);
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             print_r($e->getMessage());
             // 处理异常
 //            throw new BusinessException(code: ResultCode::FAIL, message: '同步数据到 fund_advance_status 失败：' . $e->getMessage());

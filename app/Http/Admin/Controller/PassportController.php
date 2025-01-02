@@ -69,7 +69,8 @@ final class PassportController extends AbstractController
                 $username,
                 $password,
                 Type::SYSTEM,
-                $request->ip(),
+//                $request->ip(),
+                $request->getRealClientIp(),
                 $browser,
                 $os
             )
