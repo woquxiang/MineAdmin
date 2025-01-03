@@ -124,10 +124,10 @@ export default function getTableColumns(dialog: UseDialogExpose, formRef: any, t
     {
       type: 'operation',
       label: () => t('crud.operation'),
-      width: '200px',
+      width: '80px',
       fixed:"right",
       operationConfigure: {
-        type:'tile',
+        type:'dropdown',
         actions: [
           {
             name: 'view',
@@ -168,6 +168,18 @@ export default function getTableColumns(dialog: UseDialogExpose, formRef: any, t
               })
             },
           },
+          //点击申请单弹出RescueApply表单
+          {
+            name: 'apply',
+            icon:'i-heroicons:presentation-chart-line',
+            text:()=>'申请单',
+            onClick:({row})=>{
+              //弹出Aform表单
+              dialog.setTitle(t('crud.edit'))
+              dialog.open({ formType: 'Aform', data: row })
+
+            }
+          }
         ],
       },
     },

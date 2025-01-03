@@ -293,7 +293,7 @@ const downloadAttachment = async (url: string) => {
 // 打开签名对话框
 const generateSignature = async (index) => {
   if (!dynamicModels.value[index].direct_compensation_id) {
-    //msg.error('直赔ID不能为空')
+    msg.error('请提交后生成')
     return
   }
   currentDirectCompensationId.value = dynamicModels.value[index].direct_compensation_id

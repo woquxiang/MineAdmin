@@ -14,6 +14,7 @@ import type { TransType } from '@/hooks/auto-imports/useTrans.ts'
 import type { UseDialogExpose } from '@/hooks/useDialog.ts'
 
 import { deleteByIds, page } from '~/rescuefund/api/RescueFundApplications.ts'
+import { create } from '~/rescuefund/api/RescueApply.ts'
 import getSearchItems from './components/GetSearchItems.tsx'
 import getTableColumns from './components/GetTableColumns.tsx'
 import useDialog from '@/hooks/useDialog.ts'
@@ -22,7 +23,8 @@ import { ResultCode } from '@/utils/ResultCode.ts'
 
 import Form from './Form.vue'
 import {watch} from "vue/dist/vue";
-
+// 引入Aform
+import Aform from './examine/Aform.vue'
 defineOptions({ name: 'rescuefund:rescue_fund_applications' })
 
 const proTableRef = ref<MaProTableExpose>() as Ref<MaProTableExpose>
@@ -39,7 +41,8 @@ const maDialog: UseDialogExpose = useDialog({
   // 保存数据
   ok: ({ formType }, okLoadingState: (state: boolean) => void) => {
     okLoadingState(true)
-    if (['add', 'edit'].includes(formType)) {
+    console.log(2222222,formType)
+    if (['add', 'edit','Aform'].includes(formType)) {
       const elForm = formRef.value.maForm.getElFormRef()
       // 验证通过后
       elForm.validate().then(() => {
@@ -59,6 +62,30 @@ const maDialog: UseDialogExpose = useDialog({
             formRef.value.edit().then((res: any) => {
               res.code === 200 ? msg.success(t('crud.updateSuccess')) : msg.error(res.message)
               maDialog.close()
+              proTableRef.value.refresh()
+            }).catch((err: any) => {
+              msg.alertError(err)
+            })
+            break
+          case 'Aform':
+            //获取form数据
+            const formData = formRef.value.maForm.getElFormRef().getFieldsValue()
+            //去掉id并赋值给application_id
+            formData.application_id = formData.id
+            delete formData.id
+            console.log(111,formData)
+            create(formData).then((res: any) => {
+              res.code === ResultCode.SUCCESS ? msg.success(t('crud.createSuccess')) : msg.error(res.message)
+              maDialog.close()
+              const a = document.createElement('a');
+              a.href = res.data;  // 服务器返回的文件链接
+              a.download = '直赔申请书.pdf';  // 设置下载文件的名称
+              a.target = '_blank';  // 在新标签页中打开文件
+              a.style.display = 'none';  // 隐藏链接
+              document.body.appendChild(a);  // 将链接添加到 DOM 中
+              a.click();  // 触发点击事件
+              document.body.removeChild(a);  // 下载后移除链接
+
               proTableRef.value.refresh()
             }).catch((err: any) => {
               msg.alertError(err)
@@ -190,7 +217,8 @@ function handleDelete() {
     <component :is="maDialog.Dialog">
       <template #default="{ formType, data }">
         <!-- 新增、编辑表单 -->
-        <Form ref="formRef" :form-type="formType" :data="data" />
+        <Form v-if="formType !== 'Aform'" ref="formRef" :form-type="formType" :data="data" />
+        <Aform v-else ref="formRef" :form-type="formType" :data="data" />
       </template>
     </component>
   </div>
